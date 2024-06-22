@@ -32,6 +32,8 @@ export const ColorModeContextProvider: React.FC<
   const [isMounted, setIsMounted] = useState(false);
   const [mode, setMode] = useState(defaultMode || "light");
 
+
+  
   useEffect(() => {
     setIsMounted(true);
   }, []);
