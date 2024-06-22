@@ -11,7 +11,7 @@ export const authProvider: AuthProvider = {
     try {
       const options = {
         method: 'POST',
-        url: `http://156.67.80.227:5089/api/auth/sales_team/login`,
+        url: `http://156.67.80.227:8092/api/auth/sales_team/login`,
         headers: { 'content-type': 'application/json' },
         data: { email, password }
       };
