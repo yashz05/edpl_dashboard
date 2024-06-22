@@ -1,3 +1,4 @@
+
 import React, { type CSSProperties, useState } from "react";
 import {
   CanAccess,
@@ -425,7 +426,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                 fontSize: "14px",
               }}
             >
-              <RenderToTitle collapsed={false} />
+              <RenderToTitle collapsed={true} />
             </Box>
             {drawer}
           </Box>

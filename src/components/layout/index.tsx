@@ -1,3 +1,4 @@
+
 import React from "react";
 import { ThemedLayoutContextProvider } from "@refinedev/mui";
 import { ThemedHeaderV2 as DefaultHeader } from "./header";
@@ -20,7 +21,7 @@ export const ThemedLayoutV2: React.FC<RefineThemedLayoutV2Props> = ({
   return (
     <ThemedLayoutContextProvider initialSiderCollapsed={initialSiderCollapsed}>
       <Box display="flex" flexDirection="row">
-        <SiderToRender Title={Title} />
+        <SiderToRender Title={Title}  />
         <Box
           sx={[
             {

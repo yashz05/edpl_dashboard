@@ -3,7 +3,7 @@
 import type { AuthProvider } from "@refinedev/core";
 import axios from "axios";
 import Cookies from "js-cookie";
-
+import { encrypt } from "./../../app/enc"
 
 
 export const authProvider: AuthProvider = {
@@ -17,21 +17,22 @@ export const authProvider: AuthProvider = {
       };
 
       const { data } = await axios.request(options);
-
-      if (data && data.status === 200) {
+      var n = JSON.parse(JSON.stringify(data));
+      if (data != null) {
         // Extract necessary data from response
         const { message, access, uuid } = data;
 
         // Set cookies with appropriate expiry
-        Cookies.set("token", message, {
+
+        Cookies.set("token", encrypt(message), {
           expires: remember ? 30 : 1, // 30 days if remember, 1 day otherwise
           path: "/",
         });
-        Cookies.set("date", access, {
+        Cookies.set("date", encrypt(access.toString()), {
           expires: remember ? 30 : 1,
           path: "/",
         });
-        Cookies.set("uuid", uuid, {
+        Cookies.set("uuid", encrypt(uuid), {
           expires: remember ? 30 : 1,
           path: "/",
         });
@@ -56,14 +57,17 @@ export const authProvider: AuthProvider = {
         success: false,
         error: {
           name: "LoginError",
-          message: "Error occurred during login",
+          message: "Invalid username or password",
         },
       };
     }
   },
 
   logout: async () => {
-    Cookies.remove("auth", { path: "/" });
+
+    Cookies.remove("date", { path: "/" });
+    Cookies.remove("date", { path: "/" });
+    Cookies.remove("token", { path: "/" });
     return {
       success: true,
       redirectTo: "/login",
@@ -84,7 +88,7 @@ export const authProvider: AuthProvider = {
       return {
         authenticated: false,
         logout: true,
-        redirectTo: "/wrfer",
+        redirectTo: "/login",
       };
     }
   },
@@ -98,7 +102,7 @@ export const authProvider: AuthProvider = {
     return null;
   },
   getIdentity: async () => {
-    const auth = Cookies.get("uuid");
+    const auth = Cookies.get("date");
     if (auth) {
       const parsedUser = auth;
       return parsedUser;

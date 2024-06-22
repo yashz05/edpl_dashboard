@@ -28,6 +28,9 @@
       ],
       "@pages/*": [
         "./pages/*"
+      ],
+       "@app/*": [
+        "./src/app/*"
       ]
     },
     "incremental": true

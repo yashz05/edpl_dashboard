@@ -1,13 +1,15 @@
+
 import type { AuthProvider } from "@refinedev/core";
-import { cookies } from "next/headers";
-
+// import { cookies } from "next/headers";
+import { getCookies } from 'next-client-cookies/server';
 export const authProviderServer: Pick<AuthProvider, "check"> = {
-  check: async () => {
-    const cookieStore = cookies();
+  check: async (cookies: any) => {
+    var data = JSON.parse(JSON.stringify(cookies ?? {}));
+    const auth = data.token;
+    const date = data.date;
+    const uuid = data.uuid;
 
-    const auth = cookieStore.get("token");
-    const date = cookieStore.get("date");
-    const uuid = cookieStore.get("uuid");
+    // auth && date && uuid
     if (auth && date && uuid) {
       return {
         authenticated: true,
