@@ -1,8 +1,8 @@
 "use client";
 
 import { decrypt } from "@app/enc";
-import { Stack, Typography } from "@mui/material";
-import { useSelect, useShow } from "@refinedev/core";
+import { Button, Stack, Typography } from "@mui/material";
+import { useSelect, useShow, useUpdate } from "@refinedev/core";
 import { DateField, Show, TextFieldComponent as TextField } from "@refinedev/mui";
 import { useCookies } from 'next-client-cookies';
 export default function CategoryShow() {
@@ -19,6 +19,8 @@ export default function CategoryShow() {
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
+  const { mutate } = useUpdate();
+
   const {
     options,
     queryResult: { isLoading: l, data: n },
@@ -34,6 +36,26 @@ export default function CategoryShow() {
     },
     hasPagination: false,
   });
+
+  function updatesent() {
+    // console.log(data?.data.sentsample);
+
+    mutate({
+      resource: "edpl/sample_requests",
+      id: data?.data?._id,
+      values: {
+        sentsample: data?.data.sentsample === true ? false : true,
+      },
+      meta: {
+        method: "put",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      },
+    });
+  }
+
+
   return (
 
 
@@ -41,7 +63,12 @@ export default function CategoryShow() {
 
 
 
-    <Show isLoading={isLoading}>
+    <Show isLoading={isLoading} headerButtons={({ defaultButtons }) => (
+      <>
+        {defaultButtons}
+        <Button onClick={updatesent} variant="contained">Mark As {data?.data.sentsample === true ? 'UnSent' : 'Sent'}</Button>
+      </>
+    )}>
       <Stack gap={1}>
         {/* <Typography variant="body1" fontWeight="bold">
           ID
@@ -54,7 +81,7 @@ export default function CategoryShow() {
         <TextField value={
           isLoading ? "Loading..." : options.find(
             (item) => {
-              console.log(item);
+              // console.log(item);
               return record?.company_name === item.value
             },
           )?.label
@@ -116,6 +143,9 @@ export default function CategoryShow() {
           Updated At
         </Typography>
         <TextField value={record?.updatedAt || ''} /> */}
+        <Typography variant="body1" fontWeight="bold">
+          Sample Request sent ? {record?.sentsample === true ? 'Yes' : 'No'}
+        </Typography>
       </Stack>
     </Show>
 
