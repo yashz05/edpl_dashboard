@@ -6,7 +6,7 @@ import { ThemedSiderV2 as DefaultSider } from "./sider";
 import Box from "@mui/material/Box";
 import type { RefineThemedLayoutV2Props } from "@refinedev/mui";
 
-export const ThemedLayoutV2: React.FC<RefineThemedLayoutV2Props> = ({
+export const ThemedLayoutV3: React.FC<RefineThemedLayoutV2Props> = ({
   Sider,
   Header,
   Title,

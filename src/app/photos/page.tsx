@@ -100,7 +100,7 @@ export default function ApprovedProjects() {
 
     return (
         <>
-            <List title="Sample Request">
+            <List title="Photo Upload">
                 <DataGrid
                     getRowId={(row) => row._id}
                     {...dataGridProps}

@@ -6,7 +6,8 @@ export const overriddenLightTheme = createTheme({
   palette: {
     ...RefineThemes.Blue.palette,
     primary: {
-      main: "#5508d1",
+      // main: "#5508d1",
+      main: '#19105f'
     },
     secondary: {
       main: "#2f82f1",

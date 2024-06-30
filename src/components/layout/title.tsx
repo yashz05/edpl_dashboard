@@ -10,7 +10,7 @@ import SvgIcon from "@mui/material/SvgIcon";
 import Typography from "@mui/material/Typography";
 import type { RefineLayoutThemedTitleProps } from "@refinedev/mui";
 
-export const ThemedTitleV2: React.FC<RefineLayoutThemedTitleProps> = ({
+export const ThemedTitleV3: React.FC<RefineLayoutThemedTitleProps> = ({
   collapsed,
   wrapperStyles,
   icon: iconFromProps,
@@ -40,9 +40,8 @@ export const ThemedTitleV2: React.FC<RefineLayoutThemedTitleProps> = ({
         ...wrapperStyles,
       }}
     >
-      <SvgIcon height="24px" width="24px" color="primary">
-        {icon}
-      </SvgIcon>
+      {/* HI */}
+      {icon}
       {!collapsed && (
         <Typography
           variant="h6"

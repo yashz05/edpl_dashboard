@@ -48,7 +48,7 @@ export default function ApprovedProjects() {
     const columns: GridColDef[] = [
         // { field: '_id', headerName: 'ID', width: 2 },
         // { field: 'client_name', headerName: 'Client Name', width: 200 },
-        { field: 'company_name', headerName: 'Company Name', width: 250 },
+         { field: 'company_name', headerName: 'Company Name', width: 250 },
          { field: 'customer_name', headerName: 'Interacted With', width: 250 },
          { field: 'data', headerName: 'Remark', width: 250 , valueGetter: params => params.row.data.remark},
         // {
@@ -83,9 +83,6 @@ export default function ApprovedProjects() {
             minWidth: 120,
         },
     ];
-
-
-
 
     const { dataGridProps } = useDataGrid({
 

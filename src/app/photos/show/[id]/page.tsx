@@ -170,11 +170,10 @@ export default function CategoryShow() {
           },
         }}
       >
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Upload Photo</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
+            Multiple Photos can be uploaded .
           </DialogContentText>
           <FileUploader handleChange={handleChange} multiple={true} name="file" types={fileTypes} />
         </DialogContent>

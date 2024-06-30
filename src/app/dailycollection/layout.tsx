@@ -1,4 +1,5 @@
 "use client"
+import { Headerlogo } from "@app/logo/logo";
 import { overriddenLightTheme } from "@app/theme";
 import { Header } from "@components/header";
 import { ThemeProvider } from "@mui/material";
@@ -20,6 +21,9 @@ export default async function Layout({ children }: React.PropsWithChildren) {
     <ThemeProvider theme={overriddenLightTheme}>
 
       <ThemedLayoutV2
+        Title={({ collapsed }) =>
+          <Headerlogo collapsed={collapsed} />
+        }
 
 
 

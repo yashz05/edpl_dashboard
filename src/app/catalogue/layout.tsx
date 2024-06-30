@@ -7,6 +7,7 @@ import { useCookies } from "next-client-cookies";
 import { redirect } from "next/navigation";
 import React from "react";
 import { CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
+import { Headerlogo } from "@app/logo/logo";
 export default async function Layout({ children }: React.PropsWithChildren) {
   const data = await GetData();
 
@@ -15,7 +16,18 @@ export default async function Layout({ children }: React.PropsWithChildren) {
   }
 
 
-  return (<ThemeProvider theme={overriddenLightTheme}><ThemedLayoutV2 initialSiderCollapsed={true} Header={Header}>{children}</ThemedLayoutV2></ThemeProvider>);
+  return (<ThemeProvider theme={overriddenLightTheme}>
+
+    <ThemedLayoutV2
+      Title={({ collapsed }) =>
+        <Headerlogo collapsed={collapsed} />
+      }
+
+
+
+
+      initialSiderCollapsed={true} Header={Header}>{children}</ThemedLayoutV2>
+  </ThemeProvider>);
 }
 
 
