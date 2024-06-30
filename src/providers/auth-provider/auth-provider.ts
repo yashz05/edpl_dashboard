@@ -4,14 +4,23 @@ import type { AuthProvider } from "@refinedev/core";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { encrypt } from "./../../app/enc"
+export var API_URL = ''
+export var photos = ''
+if (process.env.NODE_ENV === 'production') {
+  API_URL = "https://salesbe.eurodecor.co.in/";
+ 
+} else {
+  API_URL = "http://207.180.252.68:8092/";
 
+}
 
 export const authProvider: AuthProvider = {
+
   login: async ({ email, password, remember }) => {
     try {
       const options = {
         method: 'POST',
-        url: `http://156.67.80.227:8092/api/auth/sales_team/login`,
+        url: `${API_URL}api/auth/sales_team/login`,
         headers: { 'content-type': 'application/json' },
         data: { email, password }
       };
