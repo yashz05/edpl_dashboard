@@ -33,7 +33,22 @@ export default function ApprovedProjects() {
         },
         hasPagination: false,
     });
+    const {
+        options:opts,
+        queryResult: { isLoading:l, data: nn },
+    } = useSelect({
 
+        resource: "auth/sales_team",
+        optionValue: (item) => item.uuid,
+        optionLabel: (item) => item.name,
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        },
+        hasPagination: false,
+    });
+    const roles = cookieStore.get("date") != null ? decrypt(cookieStore.get("date") ?? '') : [];
 
     const columns: GridColDef[] = [
         {
@@ -56,7 +71,7 @@ export default function ApprovedProjects() {
                 } else {
                     const category = options.find(
                         (item) => {
-                            console.log(item);
+                           // console.log(item);
 
                             return row.company_name === item.value
                         },
@@ -101,7 +116,39 @@ export default function ApprovedProjects() {
     ];
 
 
+    if (roles.includes("admin")) {
+        columns.unshift({
+            field: "spid",
+            headerName: "Added by",
+            type: "singleSelect",
+            headerAlign: "left",
+            align: "left",
+            maxWidth: 200,
+            flex: 0.5,
+            valueOptions: opts,
+            // 
+            valueFormatter: (params: GridValueFormatterParams<Option>) => {
+                return params.value;
+            },
+            renderCell: function render({ row }) {
+                console.log(row);
+                if (isLoading) {
+                    return "Loading...";
+                } else {
+                    const category = opts.find(
+                        (item) => {
+                            // console.log(item);
+                            return row.spid === item.value
+                        },
+                    );
+                    return category?.label;
+                }
 
+
+
+            },
+        })
+    }
 
     const { dataGridProps } = useDataGrid({
         pagination: {

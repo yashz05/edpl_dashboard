@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@components/header";
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-import { useMany } from "@refinedev/core";
+import { DataGrid, GridValueFormatterParams, type GridColDef } from "@mui/x-data-grid";
+import { useMany, useSelect,Option } from "@refinedev/core";
 import {
     DateField,
     DeleteButton,
@@ -15,7 +15,9 @@ import { decrypt } from "../enc"
 import React from "react";
 import { useCookies } from 'next-client-cookies';
 export default function ApprovedProjects() {
+
     const cookieStore = useCookies();
+    const roles = cookieStore.get("date") != null ? decrypt(cookieStore.get("date") ?? '') : [];
     const token = decrypt(cookieStore.get("token") ?? '');
 
     //   "company_name": "abc 3",
@@ -25,7 +27,21 @@ export default function ApprovedProjects() {
     // "item_rate": "34",
 
 
-
+    const {
+        options,
+        queryResult: { isLoading, data: n },
+    } = useSelect({
+    
+        resource: "auth/sales_team",
+        optionValue: (item) => item.uuid,
+        optionLabel: (item) => item.name,
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        },
+        hasPagination: false,
+    });
     const columns: GridColDef[] = [
         // { field: '_id', headerName: 'ID', width: 2 },
         // { field: 'client_name', headerName: 'Client Name', width: 200 },
@@ -65,7 +81,40 @@ export default function ApprovedProjects() {
     ];
 
 
+    if (roles.includes("admin")) {
+        columns.unshift({
+            field: "spid",
+            headerName: "Added by",
+            type: "singleSelect",
+            headerAlign: "left",
+            align: "left",
+            maxWidth: 250,
+            flex: 0.5,
+            valueOptions: options,
+            // 
+            valueFormatter: (params: GridValueFormatterParams<Option>) => {
+                return params.value;
+            },
+            renderCell: function render({ row }) {
+                console.log(row);
+                if (isLoading) {
+                    return "Loading...";
+                } else {
+                    const category = options.find(
+                        (item) => {
+                            // console.log(item);
 
+                            return row.spid === item.value
+                        },
+                    );
+                    return category?.label;
+                }
+
+
+
+            },
+        })
+    }
 
     const { dataGridProps } = useDataGrid({
 
