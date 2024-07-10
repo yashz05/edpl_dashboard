@@ -55,11 +55,11 @@ export default function ApprovedProjects() {
                 return (
                     <>
                         <EditButton hideText recordItemId={row._id} />
-                        <DeleteButton hideText recordItemId={row._id} meta={{
+                        {roles.includes("admin") ?? <DeleteButton hideText recordItemId={row._id} meta={{
                             headers: {
                                 "Authorization": `Bearer ${token}`,
                             }
-                        }} />
+                        }} />}
                     </>
                 );
             },
