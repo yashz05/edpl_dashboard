@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@components/header";
 import { DataGrid, GridValueFormatterParams, type GridColDef } from "@mui/x-data-grid";
-import { useMany, useSelect,Option } from "@refinedev/core";
+import { useMany, useSelect, Option, useExport } from "@refinedev/core";
 import {
     DateField,
     DeleteButton,
@@ -14,6 +14,9 @@ import {
 import { decrypt } from "../enc"
 import React from "react";
 import { useCookies } from 'next-client-cookies';
+
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 export default function ApprovedProjects() {
     const cookieStore = useCookies();
     const token = decrypt(cookieStore.get("token") ?? '');
@@ -40,6 +43,7 @@ export default function ApprovedProjects() {
         },
         hasPagination: false,
     });
+
     const roles = cookieStore.get("date") != null ? decrypt(cookieStore.get("date") ?? '') : [];
 
     const columns: GridColDef[] = [
@@ -75,6 +79,7 @@ export default function ApprovedProjects() {
             renderCell: function render({ row }) {
                 return (
                     <>
+
                         <EditButton hideText recordItemId={row._id} />
                         <DeleteButton hideText recordItemId={row._id} meta={{
                             headers: {
@@ -90,7 +95,28 @@ export default function ApprovedProjects() {
         },
     ];
 
+    const { triggerExport, isLoading: ll } = useExport({
+        resource: "edpl/sales",
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        },
+        mapData: (item) => {
+            return {
+                ...item,
+                // category is an object, we need to stringify it
+                // category: JSON.stringify(item.category),
+                spid: options.find(
+                    (iteme) => {
+                        // console.log(item);
 
+                        return item.spid === iteme.value
+                    },
+                )?.label,
+            };
+        },
+    });
     if (roles.includes("admin")) {
         columns.unshift({
             field: "spid",
@@ -98,7 +124,7 @@ export default function ApprovedProjects() {
             type: "singleSelect",
             headerAlign: "left",
             align: "left",
-            maxWidth: 250,
+            maxWidth: 300,
             flex: 0.5,
             valueOptions: options,
             // 
@@ -147,9 +173,23 @@ export default function ApprovedProjects() {
     return (
         <>
 
-            <List title="Sales Records">
+            <List title="Sales Records" headerButtons={({ defaultButtons }) => {
+                return (
+                    <>
 
+                        {defaultButtons}
+                        
+                        <ButtonGroup>
+                            <Button onClick={() => triggerExport()} disabled={ll} variant="contained" color="primary">
+                                Export
+                            </Button>
+                        </ButtonGroup>
+                    </>
+                );
+            }}>
                 <DataGrid
+
+
                     className=""
                     getRowId={(row) => row._id}
                     {...dataGridProps}

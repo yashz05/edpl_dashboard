@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@components/header";
 import { DataGrid, GridValueFormatterParams, type GridColDef } from "@mui/x-data-grid";
-import { useMany, useSelect } from "@refinedev/core";
+import { useExport, useMany, useSelect } from "@refinedev/core";
 import { Option } from "@refinedev/core";
 import {
     DateField,
@@ -15,6 +15,7 @@ import {
 import { decrypt } from "../enc"
 import React from "react";
 import { useCookies } from 'next-client-cookies';
+import { Button, ButtonGroup } from "@mui/material";
 export default function ApprovedProjects() {
     const cookieStore = useCookies();
     const token = decrypt(cookieStore.get("token") ?? '');
@@ -34,8 +35,8 @@ export default function ApprovedProjects() {
         hasPagination: false,
     });
     const {
-        options:opts,
-        queryResult: { isLoading:l, data: nn },
+        options: opts,
+        queryResult: { isLoading: l, data: nn },
     } = useSelect({
 
         resource: "auth/sales_team",
@@ -71,7 +72,7 @@ export default function ApprovedProjects() {
                 } else {
                     const category = options.find(
                         (item) => {
-                           // console.log(item);
+                            // console.log(item);
 
                             return row.company_name === item.value
                         },
@@ -181,10 +182,61 @@ export default function ApprovedProjects() {
 
     });
 
+    const { triggerExport, isLoading: ll } = useExport({
+        resource: "edpl/sample_requests",
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        },
+
+        mapData: (item) => {
+            return {
+                ...item,
+                spid: opts.find(
+                    (iteme) => {
+                        // console.log(item);
+
+                        return item.spid === iteme.value
+                    },
+                )?.label,
+                company_name: options.find(
+                    (iteme) => {
+                        // console.log(item);
+
+                        return item.company_name === iteme.value
+                    },
+                )?.label,
+                // data: '',
+                // category is an object, we need to stringify it
+                data: JSON.stringify(item.data),
+                // {"remark":"give regular folder  show zero by euer ","visited_date_time":"2024-07-19T11:30:00.000"}
+                // remark: JSON.parse(JSON.stringify(item.data)).remark,
+                // visited_date_time: formatDate(JSON.parse(JSON.stringify(item.data)).visited_date_time),
+                // added_on: formatDate(item.createdAt)
+
+
+            };
+        },
+    });
     return (
         <>
 
-            <List title="Sample Request">
+            <List title="Sample Request"
+                headerButtons={({ defaultButtons }) => {
+                    return (
+                        <>
+                            {defaultButtons}
+
+                            <ButtonGroup>
+                                <Button onClick={() => triggerExport()} disabled={ll} variant="contained" color="primary">
+                                    Export
+                                </Button>
+                            </ButtonGroup>
+                        </>
+                    );
+                }}
+            >
                 <DataGrid
                     getRowId={(row) => row._id}
                     {...dataGridProps}

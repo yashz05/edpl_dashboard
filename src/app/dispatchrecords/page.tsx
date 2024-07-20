@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@components/header";
 import { DataGrid, GridValueFormatterParams, type GridColDef } from "@mui/x-data-grid";
-import { useMany, useSelect ,Option} from "@refinedev/core";
+import { useMany, useSelect, Option, useExport } from "@refinedev/core";
 import {
     DateField,
     DeleteButton,
@@ -14,6 +14,7 @@ import {
 import { decrypt } from "../enc"
 import React from "react";
 import { useCookies } from 'next-client-cookies';
+import { Button, ButtonGroup } from "@mui/material";
 export default function ApprovedProjects() {
     const cookieStore = useCookies();
     const token = decrypt(cookieStore.get("token") ?? '');
@@ -44,7 +45,7 @@ export default function ApprovedProjects() {
     const columns: GridColDef[] = [
         // { field: '_id', headerName: 'ID', width: 2 },
         // { field: 'client_name', headerName: 'Client Name', width: 200 },
-        { field: 'company_name', headerName: 'Company Name', width: 250 },
+        { field: 'company_name', headerName: 'Company Name', width: 200 },
         { field: 'item_type', headerName: 'Item Type', width: 250 },
         { field: 'item_name', headerName: 'Item Name', width: 250 },
         { field: 'item_qty', headerName: 'Item Quantity', width: 100 },
@@ -141,11 +142,48 @@ export default function ApprovedProjects() {
         }
 
     });
+    const { triggerExport, isLoading: ll } = useExport({
+        resource: "edpl/dispatch",
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        },
 
+        mapData: (item) => {
+            return {
+                ...item,
+                spid: options.find(
+                    (iteme) => {
+                        // console.log(item);
+
+                        return item.spid === iteme.value
+                    },
+                )?.label,
+                // category is an object, we need to stringify it
+                // category: JSON.stringify(item.category),
+
+            };
+        },
+    });
     return (
         <>
 
-            <List title="Dispatch Records">
+            <List title="Dispatch Records"
+                headerButtons={({ defaultButtons }) => {
+                    return (
+                        <>
+                            {defaultButtons}
+
+                            <ButtonGroup>
+                                <Button onClick={() => triggerExport()} disabled={ll} variant="contained" color="primary">
+                                    Export
+                                </Button>
+                            </ButtonGroup>
+                        </>
+                    );
+                }}
+            >
 
                 <DataGrid
                     className=""

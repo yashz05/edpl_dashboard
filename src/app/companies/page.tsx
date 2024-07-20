@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@components/header";
 import { DataGrid, GridValueFormatterParams, type GridColDef } from "@mui/x-data-grid";
-import { useMany, useSelect } from "@refinedev/core";
+import { useExport, useMany, useSelect } from "@refinedev/core";
 import { Option } from "@refinedev/core";
 import {
     DateField,
@@ -16,6 +16,7 @@ import {
 import { decrypt } from "../enc"
 import React from "react";
 import { useCookies } from 'next-client-cookies';
+import { Button, ButtonGroup } from "@mui/material";
 export default function ApprovedProjects() {
     const cookieStore = useCookies();
     const roles = cookieStore.get("date") != null ? decrypt(cookieStore.get("date") ?? '') : [];
@@ -35,6 +36,13 @@ export default function ApprovedProjects() {
         },
         hasPagination: false,
     });
+    function formatDate(dateString: string): string {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
 
     const columns: GridColDef[] = [
 
@@ -125,11 +133,50 @@ export default function ApprovedProjects() {
         }
 
     });
+    const { triggerExport, isLoading: ll } = useExport({
+        resource: "edpl/company",
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        },
+        mapData: (item) => {
+            return {
+                ...item,
+                // category is an object, we need to stringify it
+                address: JSON.stringify(item.address),
+                address1: JSON.parse(JSON.stringify(item.address)).address1,
+                address2: JSON.parse(JSON.stringify(item.address)).address2,
+                state: JSON.parse(JSON.stringify(item.address)).state,
+                pincode: JSON.parse(JSON.stringify(item.address)).pincode,
+                city: JSON.parse(JSON.stringify(item.address)).city,
+                district: JSON.parse(JSON.stringify(item.address)).district,
+                landmark: JSON.parse(JSON.stringify(item.address)).landmark,
+                person_to_contact: JSON.stringify(item.person_to_contact),
+                first_visited: formatDate(item.first_visited),
+                next_visit: formatDate(item.next_visit),
 
+            };
+        },
+    });
     return (
         <>
 
             <List title="Company List"
+                headerButtons={({ defaultButtons }) => {
+                    return (
+                        <>
+
+                            {defaultButtons}
+
+                            <ButtonGroup>
+                                <Button onClick={() => triggerExport()} disabled={ll} variant="contained" color="primary">
+                                    Export
+                                </Button>
+                            </ButtonGroup>
+                        </>
+                    );
+                }}
             // wrapperProps={{
             //     style: {
 

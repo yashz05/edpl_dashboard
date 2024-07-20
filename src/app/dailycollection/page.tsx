@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@components/header";
 import { DataGrid, GridValueFormatterParams, type GridColDef } from "@mui/x-data-grid";
-import { useMany, useSelect,Option } from "@refinedev/core";
+import { useMany, useSelect, Option, useExport } from "@refinedev/core";
 import {
     DateField,
     DeleteButton,
@@ -14,6 +14,7 @@ import {
 import { decrypt } from "../enc"
 import React from "react";
 import { useCookies } from 'next-client-cookies';
+import { Button, ButtonGroup } from "@mui/material";
 export default function ApprovedProjects() {
 
     const cookieStore = useCookies();
@@ -31,7 +32,7 @@ export default function ApprovedProjects() {
         options,
         queryResult: { isLoading, data: n },
     } = useSelect({
-    
+
         resource: "auth/sales_team",
         optionValue: (item) => item.uuid,
         optionLabel: (item) => item.name,
@@ -42,6 +43,14 @@ export default function ApprovedProjects() {
         },
         hasPagination: false,
     });
+    function formatDate(dateString: string): string {
+        console.log(dateString)
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
     const columns: GridColDef[] = [
         // { field: '_id', headerName: 'ID', width: 2 },
         // { field: 'client_name', headerName: 'Client Name', width: 200 },
@@ -53,7 +62,12 @@ export default function ApprovedProjects() {
 
             },
         },
-       
+        {
+            field: 'created_at', headerName: 'Added On', width: 170, renderCell: function render({ row }) {
+                // return <DateField format="d/MM/YYYY" value={row.created_at} />;
+                return <p>{formatDate(row.createdAt)}</p>
+            },
+        },
 
         // { field: 'rates', headerName: 'Rates', width: 200 },
         // { field: 'approved_by', headerName: 'Approved By', width: 200 },
@@ -132,11 +146,50 @@ export default function ApprovedProjects() {
         }
 
     });
+    const { triggerExport, isLoading: ll } = useExport({
+        resource: "edpl/collection_data",
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        },
 
+        mapData: (item) => {
+            return {
+                ...item,
+                spid: options.find(
+                    (iteme) => {
+                        // console.log(item);
+
+                        return item.spid === iteme.value
+                    },
+                )?.label,
+                // category is an object, we need to stringify it
+                // category: JSON.stringify(item.category),
+                added_on: formatDate(item.createdAt)
+
+                
+            };
+        },
+    });
     return (
         <>
 
-            <List title="Daily Collection">
+            <List title="Daily Collection"
+                headerButtons={({ defaultButtons }) => {
+                    return (
+                        <>
+                            {defaultButtons}
+
+                            <ButtonGroup>
+                                <Button onClick={() => triggerExport()} disabled={ll} variant="contained" color="primary">
+                                    Export
+                                </Button>
+                            </ButtonGroup>
+                        </>
+                    );
+                }}
+            >
 
                 <DataGrid
                     className=""

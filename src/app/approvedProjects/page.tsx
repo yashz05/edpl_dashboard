@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@components/header";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
-import { useMany } from "@refinedev/core";
+import { useExport, useMany } from "@refinedev/core";
 import {
     DateField,
     DeleteButton,
@@ -14,6 +14,7 @@ import {
 import { decrypt } from "../enc"
 import React from "react";
 import { useCookies } from 'next-client-cookies';
+import { Button, ButtonGroup } from "@mui/material";
 export default function ApprovedProjects() {
     const cookieStore = useCookies();
     const token = decrypt(cookieStore.get("token") ?? '');
@@ -62,13 +63,13 @@ export default function ApprovedProjects() {
 
 
     const { dataGridProps } = useDataGrid({
-        
-          pagination: {
+
+        pagination: {
             current: 1,
             pageSize: 100,
             mode: "client", // "client" or "server"
         },
-      
+
 
         meta: {
             headers: {
@@ -77,14 +78,44 @@ export default function ApprovedProjects() {
         }
 
     });
+    const { triggerExport, isLoading: ll } = useExport({
+        resource: "edpl/aproval_menu",
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        },
+        
+        mapData: (item) => {
+            return {
+                ...item,
+                // category is an object, we need to stringify it
+                // category: JSON.stringify(item.category),
 
+            };
+        },
+    });
     return (
         <>
 
-            <List title="Projects">
-                
+            <List title="Projects" headerButtons={({ defaultButtons }) => {
+                return (
+                    <>
+
+                        {defaultButtons}
+
+                        <ButtonGroup>
+                            <Button onClick={() => triggerExport()} disabled={ll} variant="contained" color="primary">
+                                Export
+                            </Button>
+                        </ButtonGroup>
+                    </>
+                );
+            }}>
+
                 <DataGrid
-                className=""
+
+                    className=""
                     getRowId={(row) => row._id}
                     {...dataGridProps}
                     columns={columns}
