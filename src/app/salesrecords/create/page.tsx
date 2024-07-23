@@ -340,7 +340,8 @@ export default function SalesDaily() {
 
             <TextField
               {...register("createdAt", {
-                required: "This field is required",
+                required : false,
+               
               })}
               
               error={!!errors?.from}
