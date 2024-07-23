@@ -27,7 +27,14 @@ export default function ApprovedProjects() {
     // "item_qty": "12",
     // "item_rate": "34",
 
-
+    function formatDate(dateString: string): string {
+        console.log(dateString)
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
     const {
         options,
         queryResult: { isLoading, data: n },
@@ -65,7 +72,7 @@ export default function ApprovedProjects() {
         },
         {
             field: 'from', headerName: 'Date', width: 170, renderCell: function render({ row }) {
-                return <DateField format="d/M/YYYY" value={row.created_at} />;
+                return <DateField format="D/M/YYYY" value={row.createdAt} />;
             },
         },
 
@@ -151,7 +158,7 @@ export default function ApprovedProjects() {
             },
         })
     }
-
+    
 
     const { dataGridProps } = useDataGrid({
 

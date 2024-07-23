@@ -8,6 +8,8 @@ import { useCookies } from 'next-client-cookies';
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useList } from "@refinedev/core";
+import DatePicker from "@mui/lab/DatePicker/DatePicker";
+
 
 export default function SalesDaily() {
   const cookieStore = useCookies();
@@ -91,7 +93,16 @@ export default function SalesDaily() {
     matchFrom: "start",
     limit: 10,
   });
+  const roles = cookieStore.get("date") != null ? decrypt(cookieStore.get("date") ?? '') : [];
 
+  const getCurrentMonthFirstDay = () => {
+    if (roles.includes("admin")) {
+      return undefined;
+    }
+    const date = new Date();
+    date.setDate(1);
+    return date.toISOString().split('T')[0];
+  };
   // var { data: laminate, isLoading: isLoading ,isError : e} = useList({
   //   resource: 'edpl/laminate',
   //   metaData: {
@@ -325,6 +336,24 @@ export default function SalesDaily() {
                   error={!!errors.v_length}
                 // helperText={errors.v_length ? errors.v_length.message : ''}
                 /></>}
+
+
+            <TextField
+              {...register("createdAt", {
+                required: "This field is required",
+              })}
+              
+              error={!!errors?.from}
+              margin="normal"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              type="date"
+              label="Add for Date ?"
+              name="createdAt"
+              inputProps={{ min: getCurrentMonthFirstDay() }} // Set the min attribute dynamically
+
+            />
+
 
           </Box>
         </Create>
