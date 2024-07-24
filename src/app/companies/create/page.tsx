@@ -2014,36 +2014,83 @@ export default function CategoryEdit() {
 
 
           </Box>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TextField
+
+
+          {/* <TextField
+           
               {...register("first_visited")}
               // @ts-ignore
-              renderInput={(params) => <TextField {...params} />}
-              label="First Visited"
+              // renderInput={(params) => <TextField {...params} />}
+              // label="First Visited"
               name="first_visited"
+              type="date"
             // @ts-ignore
 
             // @ts-ignore
 
             />
-          </LocalizationProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs} >
+          */}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "1rem",
+              marginTop: "1rem"
+            }}
+          >
+            <TextField
+              {...register("first_visited", {
+                required: "This field is required",
 
+              })}
+
+              error={!!errors?.from}
+              margin="normal"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              type="date"
+              label="First Visited on ?"
+              name="first_visited"
+            // inputProps={{ min: getCurrentMonthFirstDay() }} // Set the min attribute dynamically
+
+            />
+            <TextField
+              {...register("next_visit", {
+                required: "This field is required",
+
+              })}
+
+              error={!!errors?.from}
+              margin="normal"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              type="date"
+              label="Next Visit ?"
+              name="next_visit"
+            // inputProps={{ min: getCurrentMonthFirstDay() }} // Set the min attribute dynamically
+
+            />
+          </Box>
+          {/* <LocalizationProvider dateAdapter={AdapterDayjs} >
+           
             <TextField
               {...register("next_visit")}
 
 
+
               // @ts-ignore
-              renderInput={(params) => <TextField {...params} />}
+              // renderInput={(params) => <TextField {...params} />}
               label="Next Visit"
               name="next_visit"
-              // @ts-ignore
+              type="date"
+
+            // @ts-ignore
 
 
-              // @ts-ignore
-              onChange={(date) => setValue("next_visit", date)}
+            // @ts-ignore
+            // onChange={(date) => setValue("next_visit", date)}
             />
-          </LocalizationProvider>
+          </LocalizationProvider> */}
 
 
 

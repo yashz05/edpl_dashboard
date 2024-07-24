@@ -141,7 +141,7 @@ export default function ApprovedProjects() {
             },
         },
         mapData: (item) => {
-            return {
+            var data = {
                 ...item,
                 // category is an object, we need to stringify it
                 address: JSON.stringify(item.address),
@@ -156,7 +156,32 @@ export default function ApprovedProjects() {
                 first_visited: formatDate(item.first_visited),
                 next_visit: formatDate(item.next_visit),
 
+
             };
+
+            var person_to_contact = JSON.parse(data.person_to_contact);
+            // [{"company_person_name":"Bhupesh kumar ","company_person_email":"bknyar@yahoo.com","company_person_pno":"9810376142"}]
+            if (person_to_contact.length > 0) {
+                // its list can have multiple person to contact
+
+                person_to_contact.forEach((element: any, i: Number) => {
+                    // @ts-ignore
+                    data["person_to_contact_" + (i + 1)] = element.company_person_name;
+                    // @ts-ignore
+                    data["company_person_email_" + (i + 1)] = element.company_person_email;
+                    // @ts-ignore
+                    data["company_person_pno_" + (i + 1)] = element.company_person_pno;
+
+                });
+
+            } else {
+                // data["person_to_contact"] = "";
+                //   // @ts-ignore
+                // data["company_person_email"] = "";
+                //   // @ts-ignore
+                // data["company_person_pno"] = "";
+            }
+            return data;
         },
     });
     return (
