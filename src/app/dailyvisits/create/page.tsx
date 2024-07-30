@@ -96,6 +96,17 @@ export default function SalesDaily() {
   //   },
   //   "__v": 0
   // }
+
+  const roles = cookieStore.get("date") != null ? decrypt(cookieStore.get("date") ?? '') : [];
+
+  const getCurrentMonthFirstDay = () => {
+    if (roles.includes("admin")) {
+      return undefined;
+    }
+    const date = new Date();
+    date.setDate(1);
+    return date.toISOString().split('T')[0];
+  };
   return (
     formLoading ? <>Loading</> :
       <>
@@ -182,7 +193,21 @@ export default function SalesDaily() {
             // @ts-ignore
             // helperText={errors.data.remark ? errors.data.remark.message : ''}
             />
+            <TextField
+              {...register("createdAt", {
+                required: false,
 
+              })}
+              error={!!errors?.from}
+              margin="normal"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              type="date"
+              label="Add for Date ?"
+              name="createdAt"
+              inputProps={{ min: getCurrentMonthFirstDay() }} // Set the min attribute dynamically
+
+            />
 
           </Box>
         </Create>

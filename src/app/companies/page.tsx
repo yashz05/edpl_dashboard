@@ -18,9 +18,11 @@ import React from "react";
 import { useCookies } from 'next-client-cookies';
 import { Button, ButtonGroup } from "@mui/material";
 export default function ApprovedProjects() {
+
     const cookieStore = useCookies();
     const roles = cookieStore.get("date") != null ? decrypt(cookieStore.get("date") ?? '') : [];
     const token = decrypt(cookieStore.get("token") ?? '');
+
     const {
         options,
         queryResult: { isLoading, data: n },
@@ -121,10 +123,11 @@ export default function ApprovedProjects() {
             mode: "client", // "client" or "server"
         },
         filters: {
-            mode: "off",
-        }, sorters: {
-            mode: "off",
-        },
+            mode: "server",
+        }, 
+        sorters: {
+            mode: "server",
+          },
 
         meta: {
             headers: {
@@ -133,6 +136,8 @@ export default function ApprovedProjects() {
         }
 
     });
+    const { filterMode, filterModel, onFilterModelChange, ...restDataGridProps } =
+        dataGridProps;
     const { triggerExport, isLoading: ll } = useExport({
         resource: "edpl/company",
         meta: {
@@ -214,7 +219,7 @@ export default function ApprovedProjects() {
                     {...dataGridProps}
                     columns={columns}
 
-                    checkboxSelection
+                    // checkboxSelection
                     autoHeight
 
                 />
