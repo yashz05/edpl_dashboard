@@ -11,7 +11,7 @@ import {
     List,
     MarkdownField,
     ShowButton,
-    useDataGrid,
+    useDataGrid
 } from "@refinedev/mui";
 import { decrypt } from "../enc"
 import React from "react";
@@ -82,6 +82,7 @@ export default function ApprovedProjects() {
 
     if (roles.includes("admin")) {
         columns.unshift({
+          // editable: true,
             field: "sid",
             headerName: "Added by",
             type: "singleSelect",
@@ -89,44 +90,42 @@ export default function ApprovedProjects() {
             align: "left",
             maxWidth: 200,
             flex: 0.5,
+            sortable: false,
             valueOptions: options,
             // 
             valueFormatter: (params: GridValueFormatterParams<Option>) => {
                 return params.value;
             },
             renderCell: function render({ row }) {
-                console.log(row);
+                //console.log(row);
                 if (isLoading) {
                     return "Loading...";
                 } else {
                     const category = options.find(
                         (item) => {
-                            console.log(item);
+                           //console.log(item);
 
                             return row.sid === item.value
                         },
                     );
                     return category?.label;
                 }
-
-
-
             },
         })
     }
 
-    const { dataGridProps } = useDataGrid({
-        syncWithLocation: true,
+    const { dataGridProps ,setSorter} = useDataGrid({
+        // syncWithLocation: true,
         pagination: {
             current: 1,
             pageSize: 100,
-            mode: "client", // "client" or "server"
+            mode: "off", // "client" or "server"
         },
         filters: {
-            mode: "server",
+            mode: "off",
         }, 
         sorters: {
-            mode: "server",
+            mode: "off",
           },
 
         meta: {
@@ -189,6 +188,10 @@ export default function ApprovedProjects() {
             return data;
         },
     });
+
+// @ts-ignore
+    // setSorter({ field: "name", order: "asc" });
+      
     return (
         <>
 
@@ -196,9 +199,7 @@ export default function ApprovedProjects() {
                 headerButtons={({ defaultButtons }) => {
                     return (
                         <>
-
                             {defaultButtons}
-
                             <ButtonGroup>
                                 <Button onClick={() => triggerExport()} disabled={ll} variant="contained" color="primary">
                                     Export
@@ -214,10 +215,18 @@ export default function ApprovedProjects() {
             //     },
             // }}
             >
+                 
                 <DataGrid
                     getRowId={(row) => row._id}
                     {...dataGridProps}
                     columns={columns}
+                    onSortModelChange={(model, details) => {
+                        dataGridProps.onSortModelChange(model, details);
+                        console.log(model);
+
+                        
+                        // do something else
+                      }} 
 
                     // checkboxSelection
                     autoHeight
