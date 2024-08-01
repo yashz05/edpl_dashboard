@@ -114,6 +114,7 @@ export default function ApprovedProjects() {
             headerAlign: "left",
             align: "left",
             maxWidth: 250,
+            sortable: false,
             flex: 0.5,
             valueOptions: options,
             // 
@@ -146,9 +147,14 @@ export default function ApprovedProjects() {
         pagination: {
             current: 1,
             pageSize: 100,
-            mode: "client", // "client" or "server"
+            mode: "off", // "client" or "server"
         },
-
+        filters: {
+            mode: "off",
+        },
+        sorters: {
+            mode: "off",
+        },
 
         meta: {
             headers: {

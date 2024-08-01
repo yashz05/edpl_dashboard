@@ -93,6 +93,7 @@ export default function ApprovedProjects() {
         columns.unshift({
             field: "spid",
             headerName: "Added by",
+            sortable: false,
             type: "singleSelect",
             headerAlign: "left",
             align: "left",
@@ -131,9 +132,14 @@ export default function ApprovedProjects() {
         pagination: {
             current: 1,
             pageSize: 100,
-            mode: "client", // "client" or "server"
+            mode: "off", // "client" or "server"
         },
-
+        filters: {
+            mode: "off",
+        },
+        sorters: {
+            mode: "off",
+        },
 
         meta: {
             headers: {

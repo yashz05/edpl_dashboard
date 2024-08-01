@@ -122,6 +122,7 @@ export default function ApprovedProjects() {
             field: "spid",
             headerName: "Added by",
             type: "singleSelect",
+            sortable: false,
             headerAlign: "left",
             align: "left",
             maxWidth: 200,
@@ -155,15 +156,15 @@ export default function ApprovedProjects() {
         pagination: {
             current: 1,
             pageSize: 100,
-            mode: "client", // "client" or "server"
+            mode: "off", // "client" or "server"
         },
         filters: {
             mode: "off",
-        }, sorters: {
+        },
+        sorters: {
             mode: "off",
         },
 
-        syncWithLocation: false,
         meta: {
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -241,7 +242,7 @@ export default function ApprovedProjects() {
                     getRowId={(row) => row._id}
                     {...dataGridProps}
                     columns={columns}
-                    checkboxSelection
+                    // checkboxSelection
                     autoHeight
 
                 />

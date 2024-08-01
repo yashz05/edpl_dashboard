@@ -101,6 +101,7 @@ export default function ApprovedProjects() {
             headerName: "Added by",
             type: "singleSelect",
             headerAlign: "left",
+            sortable: false,
             align: "left",
             maxWidth: 250,
             flex: 0.5,
@@ -131,13 +132,17 @@ export default function ApprovedProjects() {
     }
 
     const { dataGridProps } = useDataGrid({
-
         pagination: {
             current: 1,
             pageSize: 100,
-            mode: "client", // "client" or "server"
+            mode: "off", // "client" or "server"
         },
-
+        filters: {
+            mode: "off",
+        },
+        sorters: {
+            mode: "off",
+        },
 
         meta: {
             headers: {

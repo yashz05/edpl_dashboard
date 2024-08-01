@@ -57,9 +57,9 @@ export default function ApprovedProjects() {
         // { field: '_id', headerName: 'ID', width: 2 },
         // { field: 'client_name', headerName: 'Client Name', width: 200 },
         { field: 'company_name', headerName: 'Company Name', width: 200 },
-        { field: 'item_type', headerName: 'Item Type', width: 250 },
-        { field: 'item_name', headerName: 'Item Name', width: 250 },
-        { field: 'item_qty', headerName: 'Item Quantity', width: 100 },
+        { field: 'item_type', headerName: 'Item Type', width: 100 },
+        { field: 'item_name', headerName: 'Item Name', width: 200 },
+        { field: 'item_qty', headerName: 'Item Quantity', width: 150 },
         {
             field: 'Total', headerName: 'Total Amount', width: 100, renderCell: function render({ row }) {
                 if (row.item_type === 'Veneer') {
@@ -71,7 +71,7 @@ export default function ApprovedProjects() {
             },
         },
         {
-            field: 'from', headerName: 'Date', width: 170, renderCell: function render({ row }) {
+            field: 'from', headerName: 'Date', width: 100, renderCell: function render({ row }) {
                 return <DateField format="D/M/YYYY" value={row.createdAt} />;
             },
         },
@@ -129,9 +129,10 @@ export default function ApprovedProjects() {
             field: "spid",
             headerName: "Added by",
             type: "singleSelect",
+            sortable: false,
             headerAlign: "left",
             align: "left",
-            maxWidth: 300,
+            maxWidth: 150,
             flex: 0.5,
             valueOptions: options,
             // 
@@ -165,17 +166,23 @@ export default function ApprovedProjects() {
         pagination: {
             current: 1,
             pageSize: 100,
-            mode: "client", // "client" or "server"
+            mode: "off", // "client" or "server"
         },
-
+        filters: {
+            mode: "off",
+        }, 
+        sorters: {
+            mode: "off",
+          },
 
         meta: {
             headers: {
                 "Authorization": `Bearer ${token}`,
             },
         }
-
     });
+    const { sortingMode, sortModel, onSortModelChange, ...restDataGridProps } =
+    dataGridProps;
 
     return (
         <>
@@ -197,14 +204,17 @@ export default function ApprovedProjects() {
                 <DataGrid
 
 
-                    className=""
+                    // className=""
                     getRowId={(row) => row._id}
                     {...dataGridProps}
                     columns={columns}
-                    disableVirtualization
-                    columnBuffer={50}
+                    sortingMode={sortingMode}
+                    sortModel={sortModel}
+                    onSortModelChange={onSortModelChange}
+                    // disableVirtualization
+                    // columnBuffer={50}
                     // checkboxSelection
-                    autoHeight
+                    // autoHeight
 
                 />
             </List>

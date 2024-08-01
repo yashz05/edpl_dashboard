@@ -98,13 +98,13 @@ export default function SalesDaily() {
   // }
 
   const roles = cookieStore.get("date") != null ? decrypt(cookieStore.get("date") ?? '') : [];
-
-  const getCurrentMonthFirstDay = () => {
+  const getLastMonthFirstDay = () => {
     if (roles.includes("admin")) {
       return undefined;
     }
     const date = new Date();
-    date.setDate(1);
+    date.setDate(1);  // Set to the first day of the current month
+    date.setMonth(date.getMonth() - 1);  // Move to the last month
     return date.toISOString().split('T')[0];
   };
   return (
@@ -205,7 +205,7 @@ export default function SalesDaily() {
               type="date"
               label="Add for Date ?"
               name="createdAt"
-              inputProps={{ min: getCurrentMonthFirstDay() }} // Set the min attribute dynamically
+              inputProps={{ min: getLastMonthFirstDay() }} // Set the min attribute dynamically
 
             />
 
