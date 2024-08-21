@@ -1,8 +1,10 @@
 "use client";
 import { Header } from "@components/header";
 import { DataGrid, GridValueFormatterParams, type GridColDef } from "@mui/x-data-grid";
-import { useExport, useMany, useSelect } from "@refinedev/core";
+import { useExport, useMany, useSelect, useUpdate } from "@refinedev/core";
 import { Option } from "@refinedev/core";
+import IconButton from '@mui/material/IconButton';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {
     DateField,
     DeleteButton,
@@ -18,6 +20,7 @@ import { useCookies } from 'next-client-cookies';
 import { Button, ButtonGroup } from "@mui/material";
 export default function ApprovedProjects() {
     const cookieStore = useCookies();
+    const { mutate } = useUpdate();
     const token = decrypt(cookieStore.get("token") ?? '');
     const {
         options,
@@ -66,7 +69,7 @@ export default function ApprovedProjects() {
                 return params.value;
             },
             renderCell: function render({ row }) {
-                console.log(row);
+                // console.log(row);
                 if (isLoading) {
                     return "Loading...";
                 } else {
@@ -107,6 +110,21 @@ export default function ApprovedProjects() {
                                 "Authorization": `Bearer ${token}`,
                             }
                         }} />
+                        <IconButton
+                            onClick={()=>updatesent(row)}
+                            aria-label="delete"  color="primary">
+                            {/* <DeleteIcon /> */}
+                            <CheckCircleOutlineIcon
+                                onClick={()=>updatesent(row)}
+                                color={row.sentsample === true ? 'primary' : 'disabled'}
+
+
+                            />
+                        </IconButton>
+                        {/* <Button onClick={updatesent} variant="contained">
+                            Mark As {row.sentsample === true ? 'UnSent' : 'Sent'}
+                            </Button> */}
+
                     </>
                 );
             },
@@ -133,7 +151,7 @@ export default function ApprovedProjects() {
                 return params.value;
             },
             renderCell: function render({ row }) {
-                console.log(row);
+                // console.log(row);
                 if (isLoading) {
                     return "Loading...";
                 } else {
@@ -152,6 +170,23 @@ export default function ApprovedProjects() {
         })
     }
 
+    function updatesent(data: any) {
+        // console.log(data);
+
+        mutate({
+            resource: "edpl/sample_requests",
+            id: data._id,
+            values: {
+                sentsample: data.sentsample === true ? false : true,
+            },
+            meta: {
+                method: "put",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            },
+        });
+    }
     const { dataGridProps } = useDataGrid({
         pagination: {
             current: 1,
