@@ -82,7 +82,7 @@ export default function ApprovedProjects() {
 
     if (roles.includes("admin")) {
         columns.unshift({
-          // editable: true,
+            // editable: true,
             field: "sid",
             headerName: "Added by",
             type: "singleSelect",
@@ -103,7 +103,7 @@ export default function ApprovedProjects() {
                 } else {
                     const category = options.find(
                         (item) => {
-                           //console.log(item);
+                            //console.log(item);
 
                             return row.sid === item.value
                         },
@@ -114,7 +114,7 @@ export default function ApprovedProjects() {
         })
     }
 
-    const { dataGridProps ,setSorter} = useDataGrid({
+    const { dataGridProps, setSorter } = useDataGrid({
         // syncWithLocation: true,
         pagination: {
             current: 1,
@@ -123,10 +123,10 @@ export default function ApprovedProjects() {
         },
         filters: {
             mode: "off",
-        }, 
+        },
         sorters: {
             mode: "off",
-          },
+        },
 
         meta: {
             headers: {
@@ -146,9 +146,19 @@ export default function ApprovedProjects() {
         },
         mapData: (item) => {
             var data = {
-                ...item,
+                // ...item,
+                id: item._id,
+                name: item.name,
+                added_by: options.find(
+                    (iteme) => {
+
+                        console.log(iteme);
+                        return item.sid === iteme.value
+                    },
+                )?.label,
+                // ...item,
                 // category is an object, we need to stringify it
-                address: JSON.stringify(item.address),
+                // address: JSON.stringify(item.address),
                 address1: JSON.parse(JSON.stringify(item.address)).address1,
                 address2: JSON.parse(JSON.stringify(item.address)).address2,
                 state: JSON.parse(JSON.stringify(item.address)).state,
@@ -156,14 +166,12 @@ export default function ApprovedProjects() {
                 city: JSON.parse(JSON.stringify(item.address)).city,
                 district: JSON.parse(JSON.stringify(item.address)).district,
                 landmark: JSON.parse(JSON.stringify(item.address)).landmark,
-                person_to_contact: JSON.stringify(item.person_to_contact),
                 first_visited: formatDate(item.first_visited),
                 next_visit: formatDate(item.next_visit),
-
-
+                //person_to_contact: JSON.stringify(item.person_to_contact),
             };
 
-            var person_to_contact = JSON.parse(data.person_to_contact);
+            var person_to_contact = JSON.parse(JSON.stringify(item.person_to_contact));
             // [{"company_person_name":"Bhupesh kumar ","company_person_email":"bknyar@yahoo.com","company_person_pno":"9810376142"}]
             if (person_to_contact.length > 0) {
                 // its list can have multiple person to contact
@@ -189,9 +197,9 @@ export default function ApprovedProjects() {
         },
     });
 
-// @ts-ignore
+    // @ts-ignore
     // setSorter({ field: "name", order: "asc" });
-      
+
     return (
         <>
 
@@ -215,7 +223,7 @@ export default function ApprovedProjects() {
             //     },
             // }}
             >
-                 
+
                 <DataGrid
                     getRowId={(row) => row._id}
                     {...dataGridProps}
@@ -224,9 +232,9 @@ export default function ApprovedProjects() {
                         dataGridProps.onSortModelChange(model, details);
                         console.log(model);
 
-                        
+
                         // do something else
-                      }} 
+                    }}
 
                     // checkboxSelection
                     autoHeight

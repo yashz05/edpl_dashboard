@@ -18,22 +18,14 @@ import { Button, ButtonGroup } from "@mui/material";
 export default function ApprovedProjects() {
     const cookieStore = useCookies();
     const token = decrypt(cookieStore.get("token") ?? '');
+    const roles = cookieStore.get("date") != null ? decrypt(cookieStore.get("date") ?? '') : [];
+
     const columns: GridColDef[] = [
         // { field: '_id', headerName: 'ID', width: 2 },
         // { field: 'client_name', headerName: 'Client Name', width: 200 },
         { field: 'project_name', headerName: 'Project Name', width: 250 },
         { field: 'item_design', headerName: 'Item Design', width: 250 },
-        { field: 'tentative_qty', headerName: 'Tentative Quantity', width: 100 },
-        {
-            field: 'from', headerName: 'From', width: 170, renderCell: function render({ row }) {
-                return <DateField format="d/M/YYYY" value={row.from} />;
-            },
-        },
-        {
-            field: 'to', headerName: 'To', width: 170, renderCell: function render({ row }) {
-                return <DateField format="d/M/YYYY" value={row.to} />;
-            },
-        },
+
         // { field: 'rates', headerName: 'Rates', width: 200 },
         // { field: 'approved_by', headerName: 'Approved By', width: 200 },
         // { field: 'contractor', headerName: 'Contractor', width: 200 },
@@ -58,6 +50,32 @@ export default function ApprovedProjects() {
             minWidth: 120,
         },
     ];
+
+    if (roles.includes("admin")) {
+        // columns.unshift({
+
+        // })
+        columns.push(
+            { field: 'tentative_qty', headerName: 'Tentative Quantity', width: 100 }
+        )
+        columns.push(
+            {
+                field: 'from', headerName: 'From', width: 170, renderCell: function render({ row }) {
+                    return <DateField format="d/M/YYYY" value={row.from} />;
+                },
+            },
+        )
+        columns.push(
+            {
+                field: 'to', headerName: 'To', width: 170, renderCell: function render({ row }) {
+                    return <DateField format="d/M/YYYY" value={row.to} />;
+                },
+            },
+        )
+
+
+
+    }
 
 
 
@@ -85,7 +103,7 @@ export default function ApprovedProjects() {
                 "Authorization": `Bearer ${token}`,
             },
         },
-        
+
         mapData: (item) => {
             return {
                 ...item,
