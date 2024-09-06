@@ -48,10 +48,22 @@ export default function ApprovedProjects() {
 
     const columns: GridColDef[] = [
 
-        { field: 'name', headerName: 'Name', width: 250 },
+        {
+            field: 'name', headerName: 'Name', width: 250,
+            valueGetter: parms => parms.row.name.toUpperCase()
+        },
         {
             field: 'person_to_contact', headerName: 'Person To Contact', width: 200,
-            valueGetter: params => params.row.person_to_contact.length > 0 ? params.row.person_to_contact[0].company_person_name : ""
+            // @ts-ignore
+            // valueGetter: params => params.row.person_to_contact.length > 0 ? params.row.person_to_contact[0].company_person_name : ""
+            valueGetter: params => {
+                const personToContact = params.row.person_to_contact || [];
+                if (personToContact.length > 0 && personToContact[0] && personToContact[0].company_person_name) {
+                    return personToContact[0].company_person_name.toString().toUpperCase();
+                }
+                return "";
+            }
+
         }, {
             field: 'address', headerName: 'Pincode', width: 200,
             valueGetter: params => params.row.address.pincode
@@ -108,7 +120,7 @@ export default function ApprovedProjects() {
                             return row.sid === item.value
                         },
                     );
-                    return category?.label;
+                    return category?.label.toUpperCase();
                 }
             },
         })
@@ -145,6 +157,9 @@ export default function ApprovedProjects() {
             },
         },
         mapData: (item) => {
+            // for address to create upper case output
+            var address = item.address || {};
+            console.log(typeof item.address)
             var data = {
                 // ...item,
                 id: item._id,
@@ -155,19 +170,30 @@ export default function ApprovedProjects() {
                         console.log(iteme);
                         return item.sid === iteme.value
                     },
-                )?.label,
+                )?.label.toUpperCase(),
                 // ...item,
                 // category is an object, we need to stringify it
                 // address: JSON.stringify(item.address),
-                address1: JSON.parse(JSON.stringify(item.address)).address1,
-                address2: JSON.parse(JSON.stringify(item.address)).address2,
-                state: JSON.parse(JSON.stringify(item.address)).state,
-                pincode: JSON.parse(JSON.stringify(item.address)).pincode,
-                city: JSON.parse(JSON.stringify(item.address)).city,
-                district: JSON.parse(JSON.stringify(item.address)).district,
-                landmark: JSON.parse(JSON.stringify(item.address)).landmark,
-                first_visited: formatDate(item.first_visited),
-                next_visit: formatDate(item.next_visit),
+
+                // this logic to get the address data and to convert it to uppercase
+                address1: (address.address1 || "").toUpperCase(),
+                address2: (address.address2 || "").toUpperCase(),
+                state: (address.state || "").toUpperCase(),
+                pincode: (address.pincode || "").toUpperCase(),
+                city: (address.city || "").toUpperCase(),
+                district: (address.district || "").toUpperCase(),
+                landmark: (address.landmark || "").toUpperCase(),
+
+                // alternate code og by yash
+                // address1: JSON.parse(JSON.stringify(item.address)).address1,
+                // address2: JSON.parse(JSON.stringify(item.address)).address2,
+                // state: JSON.parse(JSON.stringify(item.address)).state,
+                // pincode: JSON.parse(JSON.stringify(item.address)).pincode,
+                // city: JSON.parse(JSON.stringify(item.address)).city,
+                // district: JSON.parse(JSON.stringify(item.address)).district,
+                // landmark: JSON.parse(JSON.stringify(item.address)).landmark,
+                // first_visited: formatDate(item.first_visited),
+                // next_visit: formatDate(item.next_visit),
                 //person_to_contact: JSON.stringify(item.person_to_contact),
             };
 
