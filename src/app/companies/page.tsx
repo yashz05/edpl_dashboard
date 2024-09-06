@@ -50,7 +50,7 @@ export default function ApprovedProjects() {
 
         {
             field: 'name', headerName: 'Name', width: 250,
-            valueGetter: parms => parms.row.name.toUpperCase()
+            valueGetter: parms => parms.row.name?.toUpperCase()
         },
         {
             field: 'person_to_contact', headerName: 'Person To Contact', width: 200,
@@ -120,7 +120,7 @@ export default function ApprovedProjects() {
                             return row.sid === item.value
                         },
                     );
-                    return category?.label.toUpperCase();
+                    return category?.label?.toUpperCase();
                 }
             },
         })
