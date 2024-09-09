@@ -17,6 +17,13 @@ import { decrypt } from "../enc"
 import React from "react";
 import { useCookies } from 'next-client-cookies';
 import { Button, ButtonGroup } from "@mui/material";
+
+// interface PersonToContact {
+//     company_person_name: string;
+//     company_person_email: string;
+//     company_person_pno: string;
+// }
+
 export default function ApprovedProjects() {
 
     const cookieStore = useCookies();
@@ -159,18 +166,37 @@ export default function ApprovedProjects() {
         mapData: (item) => {
             // for address to create upper case output
             var address = item.address || {};
-            console.log(typeof item.address)
+
+            // was trying to get the i+1 logic for multiple entries............
+            // var person_to_contact_data : Record<string, string>  = {}
+
+            // var person_to_contact: PersonToContact []= JSON.parse(JSON.stringify(item.person_to_contact).toUpperCase())
+
+            // if (person_to_contact.length > 0) {
+            //     person_to_contact.forEach((element: PersonToContact, i : number) => {
+            //         person_to_contact_data[`person_to_contact_${i + 1}`] = element.company_person_name?.toUpperCase() || "";
+            //         person_to_contact_data[`company_person_email_${i + 1}`] = element.company_person_email?.toUpperCase() || "";
+            //         person_to_contact_data[`company_person_pno_${i + 1}`] = element.company_person_pno?.toUpperCase() || "";
+            //     });
+            // }
+
             var data = {
                 // ...item,
                 id: item._id,
                 name: item.name,
                 added_by: options.find(
                     (iteme) => {
-
+                        
                         console.log(iteme);
                         return item.sid === iteme.value
                     },
                 )?.label.toUpperCase(),
+
+
+                person_to_contact: JSON.stringify(item.person_to_contact).toUpperCase(),
+
+                // ...person_to_contact_data,
+
                 // ...item,
                 // category is an object, we need to stringify it
                 // address: JSON.stringify(item.address),
@@ -183,7 +209,7 @@ export default function ApprovedProjects() {
                 city: (address.city || "").toUpperCase(),
                 district: (address.district || "").toUpperCase(),
                 landmark: (address.landmark || "").toUpperCase(),
-
+                
                 // alternate code og by yash
                 // address1: JSON.parse(JSON.stringify(item.address)).address1,
                 // address2: JSON.parse(JSON.stringify(item.address)).address2,
@@ -192,33 +218,36 @@ export default function ApprovedProjects() {
                 // city: JSON.parse(JSON.stringify(item.address)).city,
                 // district: JSON.parse(JSON.stringify(item.address)).district,
                 // landmark: JSON.parse(JSON.stringify(item.address)).landmark,
-                // first_visited: formatDate(item.first_visited),
-                // next_visit: formatDate(item.next_visit),
-                //person_to_contact: JSON.stringify(item.person_to_contact),
+                // person_to_contact: JSON.stringify(item.person_to_contact).toUpperCase(),
+                first_visited: formatDate(item.first_visited),
+                next_visit: formatDate(item.next_visit),
+                
             };
 
-            var person_to_contact = JSON.parse(JSON.stringify(item.person_to_contact));
-            // [{"company_person_name":"Bhupesh kumar ","company_person_email":"bknyar@yahoo.com","company_person_pno":"9810376142"}]
-            if (person_to_contact.length > 0) {
-                // its list can have multiple person to contact
+            // var person_to_contact = JSON.parse(JSON.stringify(item.person_to_contact));
+            // // [{"company_person_name":"Bhupesh kumar ","company_person_email":"bknyar@yahoo.com","company_person_pno":"9810376142"}]
+            // if (person_to_contact.length > 0) {
+            //     // its list can have multiple person to contact
 
-                person_to_contact.forEach((element: any, i: Number) => {
-                    // @ts-ignore
-                    data["person_to_contact_" + (i + 1)] = element.company_person_name;
-                    // @ts-ignore
-                    data["company_person_email_" + (i + 1)] = element.company_person_email;
-                    // @ts-ignore
-                    data["company_person_pno_" + (i + 1)] = element.company_person_pno;
+            //     person_to_contact.forEach((element: any, i: Number) => {
+            //         // @ts-ignore
+            //         data["person_to_contact_" + (i + 1)] = element.company_person_name;
+            //         // @ts-ignore
+            //         data["company_person_email_" + (i + 1)] = element.company_person_email;
+            //         // @ts-ignore
+            //         data["company_person_pno_" + (i + 1)] = element.company_person_pno;
 
-                });
+            //     });
 
-            } else {
-                // data["person_to_contact"] = "";
-                //   // @ts-ignore
-                // data["company_person_email"] = "";
-                //   // @ts-ignore
-                // data["company_person_pno"] = "";
-            }
+            // } else {
+            //     // data["person_to_contact"] = "";
+            //     //   // @ts-ignore
+            //     // data["company_person_email"] = "";
+            //     //   // @ts-ignore
+            //     // data["company_person_pno"] = "";
+            // }
+
+
             return data;
         },
     });
