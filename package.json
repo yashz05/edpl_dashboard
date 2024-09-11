@@ -43,7 +43,8 @@
     "react-dom": "^18.0.0",
     "react-drag-drop-files": "^2.3.10",
     "react-mui-dropzone": "^4.0.7",
-    "react-window": "^1.8.10"
+    "react-window": "^1.8.10",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/autosuggest-highlight": "^3.2.3",

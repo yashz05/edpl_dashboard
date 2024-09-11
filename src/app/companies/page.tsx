@@ -18,11 +18,6 @@ import React from "react";
 import { useCookies } from 'next-client-cookies';
 import { Button, ButtonGroup } from "@mui/material";
 
-// interface PersonToContact {
-//     company_person_name: string;
-//     company_person_email: string;
-//     company_person_pno: string;
-// }
 
 export default function ApprovedProjects() {
 
@@ -166,19 +161,42 @@ export default function ApprovedProjects() {
         mapData: (item) => {
             // for address to create upper case output
             var address = item.address || {};
+            // console.log(item.person_to_contact);
+            var p_to_contact = item.person_to_contact || [];
 
-            // was trying to get the i+1 logic for multiple entries............
-            // var person_to_contact_data : Record<string, string>  = {}
+            // this code is by sanket dev for taking all the json data into one column
+            // //@ts-ignore
+            // const formatContactInfo = (contact, index, totalContacts) => {
+            //     const name = (contact.company_person_name || "").toUpperCase();
+            //     const phone = (contact.company_person_pno || "").toUpperCase();
+            //     const email = (contact.company_person_email || "").toUpperCase();
 
-            // var person_to_contact: PersonToContact []= JSON.parse(JSON.stringify(item.person_to_contact).toUpperCase())
+            //     let contactString = '';
 
-            // if (person_to_contact.length > 0) {
-            //     person_to_contact.forEach((element: PersonToContact, i : number) => {
-            //         person_to_contact_data[`person_to_contact_${i + 1}`] = element.company_person_name?.toUpperCase() || "";
-            //         person_to_contact_data[`company_person_email_${i + 1}`] = element.company_person_email?.toUpperCase() || "";
-            //         person_to_contact_data[`company_person_pno_${i + 1}`] = element.company_person_pno?.toUpperCase() || "";
-            //     });
-            // }
+            //     if (totalContacts > 1) {
+            //         contactString += `Person to contact ${index + 1}: ${name}`;
+            //     } else {
+            //         contactString += `${name}`;
+            //     }
+
+            //     if (phone) {
+            //         contactString += `, Phone: ${phone}`;
+            //     }
+            //     if (email) {
+            //         contactString += `, Email: ${email}`;
+            //     }
+
+            //     return contactString;
+            // };
+
+            // //@ts-ignore
+            // const formatContacts = (contacts) => {
+            //     const totalContacts = contacts.length;
+
+            //     //@ts-ignore
+            //     return contacts.map((contact, index) => formatContactInfo(contact, index, totalContacts)).join("; ");
+            // };
+
 
             var data = {
                 // ...item,
@@ -186,16 +204,16 @@ export default function ApprovedProjects() {
                 name: item.name,
                 added_by: options.find(
                     (iteme) => {
-                        
-                        console.log(iteme);
+
+                        // console.log(iteme);
                         return item.sid === iteme.value
                     },
                 )?.label.toUpperCase(),
 
 
-                person_to_contact: JSON.stringify(item.person_to_contact).toUpperCase(),
+                // person_to_contact: JSON.stringify(item.person_to_contact).toUpperCase(),
+                // person_to_contact: formatContacts(p_to_contact),
 
-                // ...person_to_contact_data,
 
                 // ...item,
                 // category is an object, we need to stringify it
@@ -209,7 +227,7 @@ export default function ApprovedProjects() {
                 city: (address.city || "").toUpperCase(),
                 district: (address.district || "").toUpperCase(),
                 landmark: (address.landmark || "").toUpperCase(),
-                
+
                 // alternate code og by yash
                 // address1: JSON.parse(JSON.stringify(item.address)).address1,
                 // address2: JSON.parse(JSON.stringify(item.address)).address2,
@@ -221,9 +239,10 @@ export default function ApprovedProjects() {
                 // person_to_contact: JSON.stringify(item.person_to_contact).toUpperCase(),
                 first_visited: formatDate(item.first_visited),
                 next_visit: formatDate(item.next_visit),
-                
+
             };
 
+            // this code is by yash
             // var person_to_contact = JSON.parse(JSON.stringify(item.person_to_contact));
             // // [{"company_person_name":"Bhupesh kumar ","company_person_email":"bknyar@yahoo.com","company_person_pno":"9810376142"}]
             // if (person_to_contact.length > 0) {
@@ -246,6 +265,57 @@ export default function ApprovedProjects() {
             //     //   // @ts-ignore
             //     // data["company_person_pno"] = "";
             // }
+
+
+            // below is sanket dev for multiple column
+            // var person_to_contact = JSON.parse(JSON.stringify(item.person_to_contact));
+
+            // //@ts-ignore
+            // var processedData = [];
+
+            // // Check if person_to_contact is an array
+            // if (Array.isArray(person_to_contact)) {
+            //     person_to_contact.forEach((contactList) => {
+            //         // Ensure each contactList is an array of contacts
+            //         if (Array.isArray(contactList)) {
+            //             var entryData = {};
+
+            //             // Process each contact in the contactList
+            //             contactList.forEach((element, i) => {
+            //                 const index = i + 1;
+
+            //              //@ts-ignore
+            //                 entryData[`person_to_contact_${index}`] = (element.company_person_name || "").toUpperCase();
+            //                 //@ts-ignore
+            //                 entryData[`company_person_email_${index}`] = (element.company_person_email || "").toUpperCase();
+            //                 //@ts-ignore
+            //                 entryData[`company_person_pno_${index}`] = (element.company_person_pno || "").toUpperCase();
+            //             });
+
+            //             // Fill in with default values for missing contacts up to a maximum number of contacts
+            //             const maxContacts = 5;
+            //             for (let i = contactList.length + 1; i <= maxContacts; i++) {
+            //                 //@ts-ignore
+            //                 entryData[`person_to_contact_${i}`] = "";
+            //                 //@ts-ignore
+            //                 entryData[`company_person_email_${i}`] = "";
+            //                 //@ts-ignore
+            //                 entryData[`company_person_pno_${i}`] = "";
+            //             }
+
+            //             // Add the processed entry data to the array
+            //             processedData.push(entryData);
+            //         } else {
+            //             console.error('Expected an array for contactList, but got:', contactList);
+            //         }
+            //     });
+            // } else {
+            //     console.error('Expected an array for person_to_contact, but got:', person_to_contact);
+            // }
+
+            // // Log the processed data to verify
+            // console.log(processedData);
+
 
 
             return data;
@@ -285,7 +355,7 @@ export default function ApprovedProjects() {
                     columns={columns}
                     onSortModelChange={(model, details) => {
                         dataGridProps.onSortModelChange(model, details);
-                        console.log(model);
+                        // console.log(model);
 
 
                         // do something else

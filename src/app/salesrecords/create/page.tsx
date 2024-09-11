@@ -357,6 +357,19 @@ export default function SalesDaily() {
 
             />
 
+            {/* remark addedd */}
+
+            <TextField
+              {...register("remark")}
+              label="Remark"
+              margin="normal"
+              variant="outlined"
+              required
+              error={!!errors.remark}
+              // @ts-ignore
+              helperText={errors.remark ? errors.remark.message : ''}
+            />
+
 
           </Box>
         </Create>
