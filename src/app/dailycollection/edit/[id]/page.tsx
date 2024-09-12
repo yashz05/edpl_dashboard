@@ -154,6 +154,18 @@ export default function SalesDaily() {
               helperText={errors.item_qty ? errors.amount.message : ''}
             />
 
+            {/* remark added */}
+            <TextField
+              {...register("remark", { required: "This field is required" })}
+              label="Remark"
+              margin="normal"
+              variant="outlined"
+              defaultValue={n?.data?.data.remark}
+              required
+              error={!!errors.remark}
+              // @ts-ignore
+              helperText={errors.remark ? errors.remark.message : ''}
+            />
 
           </Box>
         </Edit>

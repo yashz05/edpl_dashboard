@@ -326,6 +326,19 @@ export default function SalesDaily() {
                 // helperText={errors.v_length ? errors.v_length.message : ''}
                 /></>}
 
+                {/*  remark added */}
+
+                <TextField
+              {...register("remark", { required: "This field is required" })}
+              label="Remark"
+              margin="normal"
+              variant="outlined"
+              required
+              error={!!errors.item_rate}
+              // @ts-ignore
+              helperText={errors.item_rate ? errors.item_rate.message : ''}
+            />
+
           </Box>
         </Create>
       </>
