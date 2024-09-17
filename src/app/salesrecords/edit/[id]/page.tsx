@@ -211,7 +211,7 @@ export default function SalesDaily() {
             {
               companyNames.map((item: any, index: number) => {
                 return (
-                  <Chip label={item} variant="outlined" onClick={() => {
+                  <Chip label={item}  key={item} variant="outlined" onClick={() => {
                     searchType == 'company' ?
                       setValue("company_name", item) : setValue("item_name", item)
                   }}
