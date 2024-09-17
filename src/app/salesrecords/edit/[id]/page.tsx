@@ -111,7 +111,9 @@ export default function SalesDaily() {
   // if (e) {
   //   return <div>Something went wrong!</div>;
   // }
+
   const [companyNames, setCompanyNames] = useState<string[]>([]);
+  const [searchType, setsearchType] = useState('')
   function search_company(n: string) {
 
     var options = {
@@ -129,7 +131,59 @@ export default function SalesDaily() {
       const names = data.map((item: any) => item.name); // Extract company names
       setCompanyNames(names); // Update state
       console.log(names.length); // Log the number of company names
+      setsearchType('company')
 
+
+
+    }).catch(function (error) {
+      setCompanyNames([]); // 
+      console.error(error);
+    });
+  }
+
+  function search_veener(n: string) {
+
+    var options = {
+      method: 'GET',
+      url: `${API_URL}api/edpl/veneer/veneer/search/${n}`,
+      headers: {
+        'Content-Type': 'application/json',
+
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    axios.request(options).then(function (response) {
+      const data = response.data;
+      const names = data.map((item: any) => item.ItemName); // Extract company names
+      setCompanyNames(names); // Update state
+      console.log(names.length); // Log the number of company names
+      setsearchType('veener')
+
+
+    }).catch(function (error) {
+      setCompanyNames([]); // 
+      console.error(error);
+    });
+  }
+  function laminate_veener(n: string) {
+
+    var options = {
+      method: 'GET',
+      url: `${API_URL}api/edpl/laminate/laminate/search/${n}`,
+      headers: {
+        'Content-Type': 'application/json',
+
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    axios.request(options).then(function (response) {
+      const data = response.data;
+      const names = data.map((item: any) => item.ItemName); // Extract company names
+      setCompanyNames(names); // Update state
+      console.log(names.length); // Log the number of company names
+      setsearchType('veener')
 
 
     }).catch(function (error) {
@@ -158,10 +212,11 @@ export default function SalesDaily() {
               companyNames.map((item: any, index: number) => {
                 return (
                   <Chip label={item} variant="outlined" onClick={() => {
-                    setValue("company_name", item);
-                   }}   
-                    sx={{ marginBottom : '10'}} 
-                    />
+                    searchType == 'company' ?
+                      setValue("company_name", item) : setValue("item_name", item)
+                  }}
+                    sx={{ marginBottom: '10' }}
+                  />
                   // <Chip
                   //   key={index}  // Ensure a unique key for each rendered element
                   //   label={item} // Assuming 'item' contains the name you want to display
@@ -382,6 +437,7 @@ export default function SalesDaily() {
 
 
             } */}
+
             <TextField
               {...register("item_name", { required: "This field is required" })}
               label="Item Name"
@@ -389,6 +445,10 @@ export default function SalesDaily() {
               variant="outlined"
               defaultValue={n?.data?.data.item_name}
               required
+              onInput={(e) => {
+                // @ts-ignore
+                selectedItemType == 'Veneer' ? search_veener(e.target.value) : laminate_veener(e.target.value)
+              }}
               error={!!errors.item_name}
               // @ts-ignore
               helperText={errors.item_name ? errors.item_name.message : ''}
@@ -444,7 +504,7 @@ export default function SalesDaily() {
 
             {/* sales review */}
             <TextField
-              {...register("remark", { required: "This field is required" })}
+              {...register("remark")}
               label="Remark"
               margin="normal"
               variant="outlined"
