@@ -58,7 +58,15 @@ export default function ApprovedProjects() {
 
         {
             field: 'Amount', headerName: 'Total Amount', width: 100, renderCell: function render({ row }) {
-                return <div>{'₹' + (row.amount).toString().replace(/(\d)(?=(\d\d)+$)/g, "$1,")}</div>;
+                const formatter = new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    minimumFractionDigits: 2
+                });
+                let totalAmount;
+                totalAmount = row.amount;
+                return <div>{formatter.format(totalAmount)}</div>;
+                // return <div>{'₹' + (row.amount).toString().replace(/(\d)(?=(\d\d)+$)/g, "$1,")}</div>;
 
             },
         },

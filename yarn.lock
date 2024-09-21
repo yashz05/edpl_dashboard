@@ -788,10 +788,10 @@
   dependencies:
     glob "10.3.10"
 
-"@next/swc-win32-x64-msvc@14.2.4":
+"@next/swc-darwin-arm64@14.2.4":
   version "14.2.4"
-  resolved "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.4.tgz"
-  integrity sha512-tkLrjBzqFTP8DVrAAQmZelEahfR9OxWpFR++vAI9FBhCiIxtwHwBHC23SBHCTURBtwB4kc/x44imVOnkKGNVGg==
+  resolved "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-14.2.4.tgz"
+  integrity sha512-AH3mO4JlFUqsYcwFUHb1wAKlebHU/Hv2u2kb1pAuRanDZ7pD/A/KPD98RHZmwsJpdHQwfEc/06mgpSzwrJYnNg==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1040,14 +1040,14 @@
     qs "^6.10.1"
     warn-once "^0.1.0"
 
-"@refinedev/react-hook-form@^4.8.14", "@refinedev/react-hook-form@^4.8.20":
-  version "4.8.20"
-  resolved "https://registry.npmjs.org/@refinedev/react-hook-form/-/react-hook-form-4.8.20.tgz"
-  integrity sha512-D1bstgCZ1vykpURojXvqnVYgsmZzyEHtpqhTUIJwnqVaY8Jw5KTb7yXHnhht4zRm9vQnnnRneI88B0fIObSylA==
+"@refinedev/react-hook-form@^4.8.20", "@refinedev/react-hook-form@^4.9.0":
+  version "4.9.0"
+  resolved "https://registry.npmjs.org/@refinedev/react-hook-form/-/react-hook-form-4.9.0.tgz"
+  integrity sha512-0/x9Or0uaIc9s1TkhFJeZBNu6BYZR0t1rP/qLcIrbyT/MvUcHyCy8qraClWLfT0njzPErEGYw8Bu4B7kC5LEYA==
   dependencies:
     lodash "^4.17.21"
     lodash-es "^4.17.21"
-    react-hook-form "^7.30.0"
+    react-hook-form "^7.43.5"
 
 "@refinedev/simple-rest@^5.0.1":
   version "5.0.8"
@@ -4882,7 +4882,7 @@ react-dropzone@^10.2.1:
     file-selector "^0.1.12"
     prop-types "^15.7.2"
 
-react-hook-form@^7.30.0:
+react-hook-form@^7.30.0, react-hook-form@^7.43.5:
   version "7.51.5"
   resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.51.5.tgz"
   integrity sha512-J2ILT5gWx1XUIJRETiA7M19iXHlG74+6O3KApzvqB/w8S5NQR7AbU8HVZrMALdmDgWpRPYiZJl0zx8Z4L2mP6Q==
