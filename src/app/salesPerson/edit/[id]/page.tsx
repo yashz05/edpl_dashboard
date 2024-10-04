@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, TextField, Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText, OutlinedInput } from "@mui/material";
-import { useOne } from "@refinedev/core";
+
 import { Edit } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
 
@@ -13,20 +13,16 @@ export default function CategoryEdit() {
     register,
     control,
     setValue,
-
     refineCore: { onFinish, formLoading, queryResult: n },
-
     formState: { errors },
     watch,
   } = useForm({});
 
-
-
-
+  
 
 
   const selectedAccess = watch('access') || [];
-  // console.log(queryResult.data);
+
   return (
     <Edit saveButtonProps={saveButtonProps} title="Edit User">
       <Box
