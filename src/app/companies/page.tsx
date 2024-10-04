@@ -162,7 +162,7 @@ export default function ApprovedProjects() {
             // for address to create upper case output
             var address = item.address || {};
             // console.log(item.person_to_contact);
-            var p_to_contact = item.person_to_contact || [];
+            var person_to_contact = item.person_to_contact || [];
 
             // this code is by sanket dev for taking all the json data into one column
             // //@ts-ignore
@@ -209,16 +209,6 @@ export default function ApprovedProjects() {
                         return item.sid === iteme.value
                     },
                 )?.label.toUpperCase(),
-
-
-                // person_to_contact: JSON.stringify(item.person_to_contact).toUpperCase(),
-                // person_to_contact: formatContacts(p_to_contact),
-
-
-                // ...item,
-                // category is an object, we need to stringify it
-                // address: JSON.stringify(item.address),
-
                 // this logic to get the address data and to convert it to uppercase
                 address1: (address.address1 || "").toUpperCase(),
                 address2: (address.address2 || "").toUpperCase(),
@@ -227,7 +217,11 @@ export default function ApprovedProjects() {
                 city: (address.city || "").toUpperCase(),
                 district: (address.district || "").toUpperCase(),
                 landmark: (address.landmark || "").toUpperCase(),
-
+                 // person_to_contact: JSON.stringify(item.person_to_contact).toUpperCase(),
+                // person_to_contact: formatContacts(p_to_contact),
+                // ...item,
+                // category is an object, we need to stringify it
+                // address: JSON.stringify(item.address),
                 // alternate code og by yash
                 // address1: JSON.parse(JSON.stringify(item.address)).address1,
                 // address2: JSON.parse(JSON.stringify(item.address)).address2,
@@ -245,73 +239,73 @@ export default function ApprovedProjects() {
             // this code is by yash
             // var person_to_contact = JSON.parse(JSON.stringify(item.person_to_contact));
             // // [{"company_person_name":"Bhupesh kumar ","company_person_email":"bknyar@yahoo.com","company_person_pno":"9810376142"}]
-            // if (person_to_contact.length > 0) {
-            //     // its list can have multiple person to contact
+            if (person_to_contact.length > 0) {
+                // its list can have multiple person to contact
 
-            //     person_to_contact.forEach((element: any, i: Number) => {
-            //         // @ts-ignore
-            //         data["person_to_contact_" + (i + 1)] = element.company_person_name;
-            //         // @ts-ignore
-            //         data["company_person_email_" + (i + 1)] = element.company_person_email;
-            //         // @ts-ignore
-            //         data["company_person_pno_" + (i + 1)] = element.company_person_pno;
+                person_to_contact.forEach((element: any, i: Number) => {
+                    // @ts-ignore
+                    data["person_to_contact_" + (i + 1)] = element.company_person_name;
+                    // @ts-ignore
+                    data["company_person_email_" + (i + 1)] = element.company_person_email;
+                    // @ts-ignore
+                    data["company_person_pno_" + (i + 1)] = element.company_person_pno;
 
-            //     });
+                });
 
-            // } else {
-            //     // data["person_to_contact"] = "";
-            //     //   // @ts-ignore
-            //     // data["company_person_email"] = "";
-            //     //   // @ts-ignore
-            //     // data["company_person_pno"] = "";
-            // }
+            } else {
+                // data["person_to_contact"] = "";
+                //   // @ts-ignore
+                // data["company_person_email"] = "";
+                //   // @ts-ignore
+                // data["company_person_pno"] = "";
+            }
 
 
             // below is sanket dev for multiple column
             // var person_to_contact = JSON.parse(JSON.stringify(item.person_to_contact));
 
             // //@ts-ignore
-            // var processedData = [];
+            var processedData = [];
 
-            // // Check if person_to_contact is an array
-            // if (Array.isArray(person_to_contact)) {
-            //     person_to_contact.forEach((contactList) => {
-            //         // Ensure each contactList is an array of contacts
-            //         if (Array.isArray(contactList)) {
-            //             var entryData = {};
+            // Check if person_to_contact is an array
+            if (Array.isArray(person_to_contact)) {
+                person_to_contact.forEach((contactList) => {
+                    // Ensure each contactList is an array of contacts
+                    if (Array.isArray(contactList)) {
+                        var entryData = {};
 
-            //             // Process each contact in the contactList
-            //             contactList.forEach((element, i) => {
-            //                 const index = i + 1;
+                        // Process each contact in the contactList
+                        contactList.forEach((element, i) => {
+                            const index = i + 1;
 
-            //              //@ts-ignore
-            //                 entryData[`person_to_contact_${index}`] = (element.company_person_name || "").toUpperCase();
-            //                 //@ts-ignore
-            //                 entryData[`company_person_email_${index}`] = (element.company_person_email || "").toUpperCase();
-            //                 //@ts-ignore
-            //                 entryData[`company_person_pno_${index}`] = (element.company_person_pno || "").toUpperCase();
-            //             });
+                         //@ts-ignore
+                            entryData[`person_to_contact_${index}`] = (element.company_person_name || "").toUpperCase();
+                            //@ts-ignore
+                            entryData[`company_person_email_${index}`] = (element.company_person_email || "").toUpperCase();
+                            //@ts-ignore
+                            entryData[`company_person_pno_${index}`] = (element.company_person_pno || "").toUpperCase();
+                        });
 
-            //             // Fill in with default values for missing contacts up to a maximum number of contacts
-            //             const maxContacts = 5;
-            //             for (let i = contactList.length + 1; i <= maxContacts; i++) {
-            //                 //@ts-ignore
-            //                 entryData[`person_to_contact_${i}`] = "";
-            //                 //@ts-ignore
-            //                 entryData[`company_person_email_${i}`] = "";
-            //                 //@ts-ignore
-            //                 entryData[`company_person_pno_${i}`] = "";
-            //             }
+                        // Fill in with default values for missing contacts up to a maximum number of contacts
+                        const maxContacts = 5;
+                        for (let i = contactList.length + 1; i <= maxContacts; i++) {
+                            //@ts-ignore
+                            entryData[`person_to_contact_${i}`] = "";
+                            //@ts-ignore
+                            entryData[`company_person_email_${i}`] = "";
+                            //@ts-ignore
+                            entryData[`company_person_pno_${i}`] = "";
+                        }
 
-            //             // Add the processed entry data to the array
-            //             processedData.push(entryData);
-            //         } else {
-            //             console.error('Expected an array for contactList, but got:', contactList);
-            //         }
-            //     });
-            // } else {
-            //     console.error('Expected an array for person_to_contact, but got:', person_to_contact);
-            // }
+                        // Add the processed entry data to the array
+                        processedData.push(entryData);
+                    } else {
+                        console.error('Expected an array for contactList, but got:', contactList);
+                    }
+                });
+            } else {
+                console.error('Expected an array for person_to_contact, but got:', person_to_contact);
+            }
 
             // // Log the processed data to verify
             // console.log(processedData);

@@ -77,10 +77,11 @@ export default function ApprovedProjects() {
 
         {
             field: 'createdAt', headerName: 'Visited On', width: 170,
-            renderCell: function render({ row }) {
-                // return <DateField format="d/MM/YYYY" value={row.created_at} />;
-                return <p>{formatDate(row.createdAt)}</p>
-            },
+            // renderCell: function render({ row }) {
+            //     // return <DateField format="d/MM/YYYY" value={row.created_at} />;
+            //     return <p>{formatDate(row.createdAt)}</p>
+            // },
+            valueGetter: params => formatDate(params.row.data.visited_date_time),
         },
         // { field: 'rates', headerName: 'Rates', width: 200 },
         // { field: 'approved_by', headerName: 'Approved By', width: 200 },

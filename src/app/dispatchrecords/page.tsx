@@ -51,12 +51,20 @@ export default function ApprovedProjects() {
         { field: 'item_qty', headerName: 'Item Quantity', width: 100 },
         {
             field: 'Total', headerName: 'Total Amount', width: 100, renderCell: function render({ row }) {
+                const formatter = new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    minimumFractionDigits: 2
+                });
+
+                let totalAmount;
                 if (row.item_type === 'Veneer') {
-                    return <div>{'₹' + (row.item_qty * row.item_rate * row.v_width * row.v_length).toString().replace(/(\d)(?=(\d\d)+$)/g, "$1,")}</div>;
+                    totalAmount = row.item_qty * row.item_rate * row.v_width * row.v_length;
                 } else {
-                    return <div>{'₹' + (row.item_qty * row.item_rate).toString().replace(/(\d)(?=(\d\d)+$)/g, "$1,")}</div>;
+                    totalAmount = row.item_qty * row.item_rate;
                 }
 
+                return <div>{formatter.format(totalAmount)}</div>;
             },
         },
         {

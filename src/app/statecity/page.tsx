@@ -56,33 +56,25 @@ export default function ApprovedProjects() {
     const columns: GridColDef[] = [
         // { field: '_id', headerName: 'ID', width: 2 },
         // { field: 'client_name', headerName: 'Client Name', width: 200 },
-        { field: 'company_name', headerName: 'Company Name', width: 200 },
-        { field: 'item_type', headerName: 'Item Type', width: 100 },
-        { field: 'item_name', headerName: 'Item Name', width: 200 },
-        { field: 'item_qty', headerName: 'Item Quantity', width: 150 },
-        {
-            field: 'Total', headerName: 'Total Amount', width: 100, renderCell: function render({ row }) {
-                const formatter = new Intl.NumberFormat('en-IN', {
-                    style: 'currency',
-                    currency: 'INR',
-                    minimumFractionDigits: 2
-                });
+        { field: 'state', headerName: 'State', width: 400 },
+        // { field: 'item_type', headerName: 'Item Type', width: 100 },
+        // { field: 'item_name', headerName: 'Item Name', width: 200 },
+        // { field: 'item_qty', headerName: 'Item Quantity', width: 150 },
+        // {
+        //     field: 'Total', headerName: 'Total Amount', width: 100, renderCell: function render({ row }) {
+        //         if (row.item_type === 'Veneer') {
+        //             return <div>{'₹' + (row.item_qty * row.item_rate * row.v_width * row.v_length).toString().replace(/(\d)(?=(\d\d)+$)/g, "$1,")}</div>;
+        //         } else {
+        //             return <div>{'₹' + (row.item_qty * row.item_rate).toString().replace(/(\d)(?=(\d\d)+$)/g, "$1,")}</div>;
+        //         }
 
-                let totalAmount;
-                if (row.item_type === 'Veneer') {
-                    totalAmount = row.item_qty * row.item_rate * row.v_width * row.v_length;
-                } else {
-                    totalAmount = row.item_qty * row.item_rate;
-                }
-
-                return <div>{formatter.format(totalAmount)}</div>;
-            },
-        },
-        {
-            field: 'from', headerName: 'Date', width: 100, renderCell: function render({ row }) {
-                return <DateField format="D/M/YYYY" value={row.createdAt} />;
-            },
-        },
+        //     },
+        // },
+        // {
+        //     field: 'from', headerName: 'Date', width: 100, renderCell: function render({ row }) {
+        //         return <DateField format="D/M/YYYY" value={row.createdAt} />;
+        //     },
+        // },
 
         // { field: 'rates', headerName: 'Rates', width: 200 },
         // { field: 'approved_by', headerName: 'Approved By', width: 200 },
@@ -110,64 +102,43 @@ export default function ApprovedProjects() {
         },
     ];
 
-    const { triggerExport, isLoading: ll } = useExport({
-        resource: "edpl/sales",
-        meta: {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-            },
-        },
-        mapData: (item) => {
-            return {
-                ...item,
-                // category is an object, we need to stringify it
-                // category: JSON.stringify(item.category),
-                spid: options.find(
-                    (iteme) => {
-                        // console.log(item);
 
-                        return item.spid === iteme.value
-                    },
-                )?.label,
-            };
-        },
-    });
-    if (roles.includes("admin")) {
-        columns.unshift({
-            field: "spid",
-            headerName: "Added by",
-            type: "singleSelect",
-            sortable: false,
-            headerAlign: "left",
-            align: "left",
-            maxWidth: 150,
-            flex: 0.5,
-            valueOptions: options,
-            // 
-            valueFormatter: (params: GridValueFormatterParams<Option>) => {
-                return params.value;
-            },
-            renderCell: function render({ row }) {
-                console.log(row);
-                if (isLoading) {
-                    return "Loading...";
-                } else {
-                    const category = options.find(
-                        (item) => {
-                            // console.log(item);
+    // if (roles.includes("admin")) {
+    //     columns.unshift({
+    //         field: "spid",
+    //         headerName: "Added by",
+    //         type: "singleSelect",
+    //         sortable: false,
+    //         headerAlign: "left",
+    //         align: "left",
+    //         maxWidth: 150,
+    //         flex: 0.5,
+    //         valueOptions: options,
+    //         // 
+    //         valueFormatter: (params: GridValueFormatterParams<Option>) => {
+    //             return params.value;
+    //         },
+    //         renderCell: function render({ row }) {
+    //             console.log(row);
+    //             if (isLoading) {
+    //                 return "Loading...";
+    //             } else {
+    //                 const category = options.find(
+    //                     (item) => {
+    //                         // console.log(item);
 
-                            return row.spid === item.value
-                        },
-                    );
-                    return category?.label;
-                }
+    //                         return row.spid === item.value
+    //                     },
+    //                 );
+    //                 return category?.label;
+    //             }
 
 
 
-            },
-        })
-    }
-
+    //         },
+    //     })
+    // }
+    
 
     const { dataGridProps } = useDataGrid({
 
@@ -178,10 +149,10 @@ export default function ApprovedProjects() {
         },
         filters: {
             mode: "off",
-        },
+        }, 
         sorters: {
             mode: "off",
-        },
+          },
 
         meta: {
             headers: {
@@ -190,25 +161,30 @@ export default function ApprovedProjects() {
         }
     });
     const { sortingMode, sortModel, onSortModelChange, ...restDataGridProps } =
-        dataGridProps;
+    dataGridProps;
 
     return (
         <>
 
-            <List title="Sales Records" headerButtons={({ defaultButtons }) => {
-                return (
-                    <>
+            <List title="State City Records"
+            
+            // headerButtons={({ defaultButtons }) => {
+            //     return (
+            //         <>
 
-                        {defaultButtons}
+            //             {defaultButtons}
+                        
+            //             <ButtonGroup>
+            //                 <Button onClick={() => triggerExport()} disabled={ll} variant="contained" color="primary">
+            //                     Export
+            //                 </Button>
+            //             </ButtonGroup>
+            //         </>
+            //     );
 
-                        <ButtonGroup>
-                            <Button onClick={() => triggerExport()} disabled={ll} variant="contained" color="primary">
-                                Export
-                            </Button>
-                        </ButtonGroup>
-                    </>
-                );
-            }}>
+            // }}
+            
+            >
                 <DataGrid
 
 
@@ -219,10 +195,10 @@ export default function ApprovedProjects() {
                     sortingMode={sortingMode}
                     sortModel={sortModel}
                     onSortModelChange={onSortModelChange}
-                // disableVirtualization
-                // columnBuffer={50}
-                // checkboxSelection
-                // autoHeight
+                    // disableVirtualization
+                    // columnBuffer={50}
+                    // checkboxSelection
+                    // autoHeight
 
                 />
             </List>

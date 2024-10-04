@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, TextField, Autocomplete, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { Box, TextField, Autocomplete, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Chip, Avatar, Stack } from "@mui/material";
 import { Edit, useAutocomplete } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
 import { decrypt } from "@app/enc";
@@ -8,6 +8,9 @@ import { useCookies } from 'next-client-cookies';
 import { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useList } from "@refinedev/core";
+import axios from "axios";
+import { API_URL } from "@providers/auth-provider";
+import { deepPurple } from "@mui/material/colors";
 
 export default function SalesDaily() {
   const cookieStore = useCookies();
@@ -30,15 +33,15 @@ export default function SalesDaily() {
     },
   });
 
-  const { autocompleteProps: companylist } = useAutocomplete({
-    resource: "edpl/company",
-    metaData: {
-      headers: {
-        "Authorization": `Bearer ${token}`,
-      },
-    },
-    defaultValue: n?.data?.data.company_name,
-  });
+  // const { autocompleteProps: companylist } = useAutocomplete({
+  //   resource: "edpl/company",
+  //   metaData: {
+  //     headers: {
+  //       "Authorization": `Bearer ${token}`,
+  //     },
+  //   },
+  //   defaultValue: n?.data?.data.company_name,
+  // });
   //  const { autocompleteProps: l } = useAutocomplete({
   //     resource: "edpl/veneer",
   //     metaData: {
@@ -55,37 +58,37 @@ export default function SalesDaily() {
 
   const selectedItemType = watch('item_type') || 'Veneer';
 
-  const { autocompleteProps: itemProps } = useAutocomplete({
-    debounce: 500,
-    pagination: {
-      pageSize: 10000,
-      mode: "client",
-    },
-    resource: `edpl/veneer`,
-    metaData: {
-      headers: {
-        "Authorization": `Bearer ${token}`,
-      },
-    },
-    defaultValue: n?.data?.data.item_name
-  });
-  const { autocompleteProps: lami } = useAutocomplete({
+  // const { autocompleteProps: itemProps } = useAutocomplete({
+  //   debounce: 500,
+  //   pagination: {
+  //     pageSize: 10000,
+  //     mode: "client",
+  //   },
+  //   resource: `edpl/veneer`,
+  //   metaData: {
+  //     headers: {
+  //       "Authorization": `Bearer ${token}`,
+  //     },
+  //   },
+  //   defaultValue: n?.data?.data.item_name
+  // });
+  // const { autocompleteProps: lami } = useAutocomplete({
 
-    resource: `edpl/laminate`,
-    debounce: 500,
+  //   resource: `edpl/laminate`,
+  //   debounce: 500,
 
-    pagination: {
-      current: 1,
-      pageSize: 1000,
-      mode: "client",
-    },
-    metaData: {
-      headers: {
-        "Authorization": `Bearer ${token}`,
-      },
-    },
-    // defaultValue : n?.data?.data.item_name
-  });
+  //   pagination: {
+  //     current: 1,
+  //     pageSize: 1000,
+  //     mode: "client",
+  //   },
+  //   metaData: {
+  //     headers: {
+  //       "Authorization": `Bearer ${token}`,
+  //     },
+  //   },
+  //   // defaultValue : n?.data?.data.item_name
+  // });
 
 
   // var { data: laminate, isLoading: isLoading ,isError : e} = useList({
@@ -109,12 +112,125 @@ export default function SalesDaily() {
   //   return <div>Something went wrong!</div>;
   // }
 
+  const [companyNames, setCompanyNames] = useState<string[]>([]);
+  const [searchType, setsearchType] = useState('')
+  function search_company(n: string) {
+
+    var options = {
+      method: 'GET',
+      url: `${API_URL}api/edpl/company/companies/search/${n}`,
+      headers: {
+        'Content-Type': 'application/json',
+
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    axios.request(options).then(function (response) {
+      const data = response.data;
+      const names = data.map((item: any) => item.name); // Extract company names
+      setCompanyNames(names); // Update state
+      console.log(names.length); // Log the number of company names
+      setsearchType('company')
+
+
+
+    }).catch(function (error) {
+      setCompanyNames([]); // 
+      console.error(error);
+    });
+  }
+
+  function search_veener(n: string) {
+
+    var options = {
+      method: 'GET',
+      url: `${API_URL}api/edpl/veneer/veneer/search/${n}`,
+      headers: {
+        'Content-Type': 'application/json',
+
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    axios.request(options).then(function (response) {
+      const data = response.data;
+      const names = data.map((item: any) => item.ItemName); // Extract company names
+      setCompanyNames(names); // Update state
+      console.log(names.length); // Log the number of company names
+      setsearchType('veener')
+
+
+    }).catch(function (error) {
+      setCompanyNames([]); // 
+      console.error(error);
+    });
+  }
+  function laminate_veener(n: string) {
+
+    var options = {
+      method: 'GET',
+      url: `${API_URL}api/edpl/laminate/laminate/search/${n}`,
+      headers: {
+        'Content-Type': 'application/json',
+
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    axios.request(options).then(function (response) {
+      const data = response.data;
+      const names = data.map((item: any) => item.ItemName); // Extract company names
+      setCompanyNames(names); // Update state
+      console.log(names.length); // Log the number of company names
+      setsearchType('veener')
+
+
+    }).catch(function (error) {
+      setCompanyNames([]); // 
+      console.error(error);
+    });
+  }
   return (
     formLoading ? <>Loading</> :
       <>
 
 
         <Edit saveButtonProps={saveButtonProps} isLoading={formLoading} title="Edit Sales Record">
+          <Stack
+            width={'100vw'}
+            direction="row"
+            spacing={1}
+            sx={{
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              overflow: 'auto'
+            }}
+          >
+
+            {
+              companyNames.map((item: any, index: number) => {
+                return (
+                  <Chip label={item}  key={item} variant="outlined" onClick={() => {
+                    searchType == 'company' ?
+                      setValue("company_name", item) : setValue("item_name", item)
+                  }}
+                    sx={{ marginBottom: '10' }}
+                  />
+                  // <Chip
+                  //   key={index}  // Ensure a unique key for each rendered element
+                  //   label={item} // Assuming 'item' contains the name you want to display
+                  //   variant="outlined"
+                  //   color="info"
+                  //   size="small"
+                  //   avatar={<Avatar
+                  //     sx={{ bgcolor: deepPurple[500],color: 'white' }}
+                  //   >{item[0].toUpperCase()}</Avatar>} // Display the first letter of the company name
+                  // />
+                )
+              })
+            }
+          </Stack>
           <Box
             sx={{
               display: "grid",
@@ -122,7 +238,7 @@ export default function SalesDaily() {
               gap: "1rem",
             }}
           >
-            <Controller
+            {/* <Controller
               control={control}
               name="company_name"
               rules={{ required: "This field is required" }}
@@ -167,7 +283,27 @@ export default function SalesDaily() {
                   )}
                 />
               )}
+            /> */}
+
+
+            <TextField
+              {...register("company_name", { required: "This field is required" })}
+              label="Company Name"
+              margin="normal"
+              variant="outlined"
+              onInput={(e) => {
+                // @ts-ignore
+
+                search_company(e.target.value);
+              }}
+              defaultValue={n?.data?.data.company_name}
+              required
+              error={!!errors.company_name}
+              // @ts-ignore
+              helperText={errors.company_name ? errors.company_name.message : ''}
             />
+
+
 
             <FormControl component="fieldset">
               <FormLabel component="legend">Item Type</FormLabel>
@@ -184,7 +320,7 @@ export default function SalesDaily() {
                 )}
               />
             </FormControl>
-            {
+            {/* {
               selectedItemType == 'Veneer' ?
                 <Controller
                   control={control}
@@ -300,7 +436,23 @@ export default function SalesDaily() {
                 />
 
 
-            }
+            } */}
+
+            <TextField
+              {...register("item_name", { required: "This field is required" })}
+              label="Item Name"
+              margin="normal"
+              variant="outlined"
+              defaultValue={n?.data?.data.item_name}
+              required
+              onInput={(e) => {
+                // @ts-ignore
+                selectedItemType == 'Veneer' ? search_veener(e.target.value) : laminate_veener(e.target.value)
+              }}
+              error={!!errors.item_name}
+              // @ts-ignore
+              helperText={errors.item_name ? errors.item_name.message : ''}
+            />
 
 
             <TextField
@@ -352,7 +504,7 @@ export default function SalesDaily() {
 
             {/* sales review */}
             <TextField
-              {...register("remark", { required: "This field is required" })}
+              {...register("remark")}
               label="Remark"
               margin="normal"
               variant="outlined"
@@ -363,8 +515,8 @@ export default function SalesDaily() {
               helperText={errors.remark ? errors.remark.message : ''}
             />
 
-        </Box>
-      </Edit >
+          </Box>
+        </Edit >
       </>
   );
 }
