@@ -69,7 +69,9 @@ export default function ApprovedProjects() {
                 return params.value;
             },
             renderCell: function render({ row }) {
+                // 
                 // console.log(row);
+                // 
                 if (isLoading) {
                     return "Loading...";
                 } else {
@@ -88,6 +90,14 @@ export default function ApprovedProjects() {
             },
         },
         { field: 'type', headerName: 'Request Type', width: 100 },
+        {
+            field: 'catalogue_selection', 
+            headerName: 'Sample Type', 
+            width: 200,
+            renderCell: function render({ row }) {
+                return row.data?.catalogue_selection || ""; 
+            },
+        },
         {
             field: 'from', headerName: 'Requested On', width: 170, renderCell: function render({ row }) {
                 return <DateField format="D/M/YYYY" value={row.createdAt} />;

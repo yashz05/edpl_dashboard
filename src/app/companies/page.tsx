@@ -55,6 +55,10 @@ export default function ApprovedProjects() {
             valueGetter: parms => parms.row.name?.toUpperCase()
         },
         {
+            field: 'date', headerName: 'Date', width: 150,
+            valueGetter: parms => formatDate(parms.row.createdAt)
+        },
+        {
             field: 'person_to_contact', headerName: 'Person To Contact', width: 200,
             // @ts-ignore
             // valueGetter: params => params.row.person_to_contact.length > 0 ? params.row.person_to_contact[0].company_person_name : ""
@@ -266,6 +270,7 @@ export default function ApprovedProjects() {
 
             // //@ts-ignore
             var processedData = [];
+            
 
             // Check if person_to_contact is an array
             if (Array.isArray(person_to_contact)) {

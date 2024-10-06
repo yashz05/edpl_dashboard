@@ -110,6 +110,106 @@ export default function ApprovedProjects() {
         },
     ];
 
+
+    // const [companies, setCompanies] = useState([]);
+
+    // // Fetch data from the companies API
+    // useEffect(() => {
+    //     const fetchCompanies = async () => {
+    //         try {
+    //             const response = await fetch('your_api_base/edpl/companies', {
+    //                 method: 'GET',
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`,
+    //                 },
+    //             });
+                
+    //             if (!response.ok) {
+    //                 throw new Error(`HTTP error! Status: ${response.status}`);
+    //             }
+
+    //             const data = await response.json();
+    //             setCompanies(data); // Assuming data is an array
+    //         } catch (error) {
+    //             console.error("Error fetching companies:", error);
+    //         }
+    //     };
+        
+    //     fetchCompanies();
+    // }, [token]);
+
+    // logic 
+    // const { triggerExport, isLoading: ll } = useExport({
+    //     resource: "edpl/sales",
+    //     meta: {
+    //         headers: {
+    //             "Authorization": `Bearer ${token}`,
+    //         },
+    //     },
+    //     mapData: (item) => {
+
+    //         //@ts-ignore
+    //         const company = companies.find(c => c._id === item.company_id);
+    //         console.log(company);
+            
+        
+    //         return {
+    //             // Map the required fields for the export
+    //             "Date of Sales": new Date(item.createdAt).toLocaleDateString(), 
+    //                         //@ts-ignore
+    //             "Party Name": company?.name || " ", 
+    //                         //@ts-ignore
+    //             "Party Type": company?.person_to_contact[0]?.customer_type || " ", 
+    //                         //@ts-ignore
+    //             "Party Grade": company?.person_to_contact[0]?.customer_grade || " ",
+    //             "Design Name": item.item_name || " ", 
+    //             "Item Type": item.item_type || " ", 
+    //             "Qty": Number(item.item_qty) || 0, 
+    //             "Rate": Number(item.item_rate) || 0, 
+    //             "Amount": (Number(item.item_qty) * Number(item.item_rate)) || 0, 
+    //             "Added By": options.find(
+    //                 (iteme) => item.spid === iteme.value
+    //             )?.label || " ",
+    //         };
+    //     },
+    // });
+
+    // // If user has admin role, add "Added By" column
+    // if (roles.includes("admin")) {
+    //     columns.unshift({
+    //         field: "spid",
+    //         headerName: "Added by",
+    //         type: "singleSelect",
+    //         sortable: false,
+    //         headerAlign: "left",
+    //         align: "left",
+    //         maxWidth: 150,
+    //         flex: 0.5,
+    //         valueOptions: options,
+    //         valueFormatter: (params: GridValueFormatterParams<Option>) => {
+    //             return params.value;
+    //         },
+    //         renderCell: function render({ row }) {
+    //             if (isLoading) {
+    //                 return "Loading...";
+    //             } else {
+    //                 const category = options.find(
+    //                     (item) => row.spid === item.value
+    //                 );
+    //                 return category?.label || "N/A";
+    //             }
+    //         },
+    //     });
+    // }
+
+    // function formatDate(dateString: string): string {
+    //     const date = new Date(dateString);
+    //     const day = String(date.getDate()).padStart(2, '0');
+    //     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    //     const year = date.getFullYear();
+    //     return `${day}/${month}/${year}`;
+    // }
+
     const { triggerExport, isLoading: ll } = useExport({
         resource: "edpl/sales",
         meta: {
