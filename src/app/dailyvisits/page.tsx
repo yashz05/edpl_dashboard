@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@components/header";
 import { DataGrid, GridValueFormatterParams, type GridColDef } from "@mui/x-data-grid";
-import { useMany, useSelect, Option, useExport } from "@refinedev/core";
+import { useMany, useSelect, Option, useExport, useResource, useOne, useList } from "@refinedev/core";
 import {
     DateField,
     DeleteButton,
@@ -62,6 +62,11 @@ export default function ApprovedProjects() {
         },
         hasPagination: false,
     });
+
+
+
+
+
     const columns: GridColDef[] = [
         // { field: '_id', headerName: 'ID', width: 2 },
         // { field: 'client_name', headerName: 'Client Name', width: 200 },
@@ -123,7 +128,7 @@ export default function ApprovedProjects() {
                 return params.value;
             },
             renderCell: function render({ row }) {
-                console.log(row);
+                // console.log(row);
                 if (isLoading) {
                     return "Loading...";
                 } else {
@@ -165,7 +170,7 @@ export default function ApprovedProjects() {
 
     });
     function formatDate(dateString: string): string {
-        console.log(dateString)
+        // console.log(dateString)
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -174,6 +179,39 @@ export default function ApprovedProjects() {
     }
 
 
+
+    const { data, isLoading: ils, isError } = useList({
+        resource: "edpl/company",
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        }
+
+
+    });
+
+    if (!ils) {
+        var cmpl1 = data?.data;
+        var cmpl = JSON.parse(JSON.stringify(cmpl1));
+        console.log("ssss");
+
+        console.log(cmpl[0]);
+    }
+
+    // console.log(data?.data);
+
+
+
+
+
+
+    // // Date of Visit
+    // Party Name
+    // Party Type
+    // Party Grade
+    // Particulars 
+    // Added By
     const { triggerExport, isLoading: ll } = useExport({
         resource: "edpl/daily_visit",
         meta: {
@@ -183,25 +221,28 @@ export default function ApprovedProjects() {
         },
 
         mapData: (item) => {
+            // var cmpl3 = JSON.parse(JSON.stringify(cmpl1));
+            console.log(item['company_name']);
+            // console.log(data?.data[0].name);
+            var cg = data?.data.find((i: any) => item.company_name === i.name)?.customer_grade
+            var ct = data?.data.find((i: any) => item.company_name === i.name)?.customer_type
+
+            // console.log(ch);
+
+
+            var c = data?.data.find((i: any) => item.company_name = i.name)?.name
+            // console.log(c);
+
             return {
-                ...item,
-                spid: options.find(
-                    (iteme) => {
-                        // console.log(item);
-
-                        return item.spid === iteme.value
-                    },
-                )?.label,
-                data: '',
-                // category is an object, we need to stringify it
-                // data: JSON.stringify(item.data),
-                // {"remark":"give regular folder  show zero by euer ","visited_date_time":"2024-07-19T11:30:00.000"}
-                remark: JSON.parse(JSON.stringify(item.data)).remark,
                 visited_date_time: formatDate(JSON.parse(JSON.stringify(item.data)).visited_date_time),
+                spid: options.find((iteme) => item.spid === iteme.value)?.label,
+                company_name: item.company_name,
+                customer_type: ct,
+                custome_grade: cg,
+                remark: JSON.parse(JSON.stringify(item.data)).remark,
                 added_on: formatDate(item.createdAt)
-
-
             };
+
         },
     });
     return (

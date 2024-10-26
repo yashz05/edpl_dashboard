@@ -70,11 +70,34 @@ export default function ApprovedProjects() {
                 return "";
             }
 
+        },
+        {
+            field: 'address1', headerName: 'Address 1', width: 400,
+            valueGetter: params => params.row.address.address1
+        },
+        {
+            field: 'address2', headerName: 'Address 2', width: 400,
+            valueGetter: params => params.row.address.address2
+        },
+        {
+
+            field: 'state', headerName: 'State', width: 200,
+            valueGetter: params => params.row.address.state
         }, {
-            field: 'address', headerName: 'Pincode', width: 200,
+
+            field: 'city', headerName: 'City', width: 200,
+            valueGetter: params => params.row.address.city
+        }, {
+
+            field: 'pincode', headerName: 'Pincode', width: 200,
             valueGetter: params => params.row.address.pincode
         },
-        { field: 'area_of_company', headerName: 'Area', width: 200 },
+//         //   "customer_type": "Dealer / Competitor",
+//   "customer_grade": "A",
+//   "customer_history": "More than 10 Years",
+        { field: 'customer_type', headerName: 'Customer Type', width: 200 },
+        { field: 'customer_grade', headerName: 'Customer Grade', width: 200 },
+        { field: 'customer_history', headerName: 'Customer History', width: 200 },
         {
             field: "actions",
             headerName: "Actions",
@@ -106,7 +129,7 @@ export default function ApprovedProjects() {
             type: "singleSelect",
             headerAlign: "left",
             align: "left",
-            maxWidth: 200,
+            minWidth: 300,
             flex: 0.5,
             sortable: false,
             valueOptions: options,
@@ -162,6 +185,7 @@ export default function ApprovedProjects() {
                 "Authorization": `Bearer ${token}`,
             },
         },
+
         mapData: (item) => {
             // for address to create upper case output
             var address = item.address || {};
@@ -221,7 +245,7 @@ export default function ApprovedProjects() {
                 city: (address.city || "").toUpperCase(),
                 district: (address.district || "").toUpperCase(),
                 landmark: (address.landmark || "").toUpperCase(),
-                 // person_to_contact: JSON.stringify(item.person_to_contact).toUpperCase(),
+                // person_to_contact: JSON.stringify(item.person_to_contact).toUpperCase(),
                 // person_to_contact: formatContacts(p_to_contact),
                 // ...item,
                 // category is an object, we need to stringify it
@@ -283,7 +307,7 @@ export default function ApprovedProjects() {
                         contactList.forEach((element, i) => {
                             const index = i + 1;
 
-                         //@ts-ignore
+                            //@ts-ignore
                             entryData[`person_to_contact_${index}`] = (element.company_person_name || "").toUpperCase();
                             //@ts-ignore
                             entryData[`company_person_email_${index}`] = (element.company_person_email || "").toUpperCase();
