@@ -135,7 +135,7 @@ export default function SalesDaily() {
                 <Autocomplete
                   {...field}
                   {...companylist}
-                  onChange={(_, value) => {
+                  onChange={(_, value:any) => {
                     field.onChange(value.name);
                   }}
                   getOptionLabel={(item) => (
