@@ -197,7 +197,7 @@ export default function SalesDaily() {
                     <Autocomplete
                       {...field}
                       {...itemProps}
-                      onChange={(_, value) => {
+                      onChange={(_, value:any) => {
                         field.onChange(value.ItemName);
                       }}
                       getOptionLabel={(item) => (
@@ -244,7 +244,7 @@ export default function SalesDaily() {
                       {...field}
                       {...lami}
                       filterOptions={filterOptions}
-                      onChange={(_, value) => {
+                      onChange={(_, value:any) => {
                         field.onChange(value.ItemName);
                       }}
                       getOptionLabel={(item) => (
