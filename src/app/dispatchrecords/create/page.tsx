@@ -251,6 +251,7 @@ export default function SalesDaily() {
                         lami?.options?.find((p) => {
                           const itemId =
                             typeof item === "object"
+                            // @ts-ignore
                               ? item?.ItemName?.toString()
                               : item?.toString();
                           const pId = p?.ItemName?.toString();
@@ -258,9 +259,11 @@ export default function SalesDaily() {
                         })?.ItemName ?? ""
                       )}
                       isOptionEqualToValue={(option, value) => {
+                          // @ts-ignore
                         const optionId = option?.ItemName?.toString();
                         const valueId =
                           typeof value === "object"
+                            // @ts-ignore
                             ? value?.ItemName?.toString()
                             : value?.toString();
                         return value === undefined || optionId === valueId;
