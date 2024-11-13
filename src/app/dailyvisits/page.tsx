@@ -236,7 +236,7 @@ export default function ApprovedProjects() {
             return {
                 visited_date_time: formatDate(JSON.parse(JSON.stringify(item.data)).visited_date_time),
                 spid: options.find((iteme) => item.spid === iteme.value)?.label,
-                company_name: item.company_name,
+                company_name: item['company_name'],
                 customer_type: ct,
                 custome_grade: cg,
                 remark: JSON.parse(JSON.stringify(item.data)).remark,
