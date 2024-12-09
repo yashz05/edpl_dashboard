@@ -6,13 +6,13 @@ import axios from "axios";
 export var API_URL = ''
 export var photos = ''
 // UAT
-// http://207.180.252.68:8092/
+// http://152.53.111.150:8092/
 if (process.env.NODE_ENV === 'production') {
     API_URL = "https://salesbe.eurodecor.co.in/api";
     photos = "https://salesbe.eurodecor.co.in/assets/uploads/";
 } else {
-    API_URL = "http://207.180.252.68:8092/api";
-    photos = "http://207.180.252.68:8092/assets/uploads/";
+    API_URL = "http://152.53.111.150:8092/api";
+    photos = "http://152.53.111.150:8092/assets/uploads/";
 }
 
 

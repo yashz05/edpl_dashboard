@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
   API_URL = "https://salesbe.eurodecor.co.in/";
  
 } else {
-  API_URL = "http://207.180.252.68:8092/";
+  API_URL = "http://152.53.111.150:8092/";
 
 }
 

@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@components/header";
 import { DataGrid, GridValueFormatterParams, type GridColDef } from "@mui/x-data-grid";
-import { useMany, useSelect, Option, useExport } from "@refinedev/core";
+import { useMany, useSelect, Option, useExport, useList } from "@refinedev/core";
 import {
     DateField,
     DeleteButton,
@@ -209,7 +209,38 @@ export default function ApprovedProjects() {
     //     const year = date.getFullYear();
     //     return `${day}/${month}/${year}`;
     // }
+    const { data, isLoading: ils, isError } = useList({
+        resource: "edpl/company",
+        meta: {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        }
 
+
+    });
+    // const { triggerExport, isLoading: ll } = useExport({
+    //     resource: "edpl/sales",
+    //     meta: {
+    //         headers: {
+    //             "Authorization": `Bearer ${token}`,
+    //         },
+    //     },
+    //     mapData: (item) => {
+    //         return {
+    //             ...item,
+    //             // category is an object, we need to stringify it
+    //             // category: JSON.stringify(item.category),
+    //             spid: options.find(
+    //                 (iteme) => {
+    //                     // console.log(item);
+
+    //                     return item.spid === iteme.value
+    //                 },
+    //             )?.label,
+    //         };
+    //     },
+    // });
     const { triggerExport, isLoading: ll } = useExport({
         resource: "edpl/sales",
         meta: {
@@ -218,20 +249,27 @@ export default function ApprovedProjects() {
             },
         },
         mapData: (item) => {
+            if (!item || !data?.data) {
+                console.error("Item or data is missing");
+                return {};
+            }
+    
+            // Extract customer grade and type based on the company name
+            const customer = data.data.find((i) => item.company_name === i.name);
+            const cg = customer?.customer_grade || "N/A";
+            const ct = customer?.customer_type || "N/A";
+    
+            // Map the data for export
             return {
                 ...item,
-                // category is an object, we need to stringify it
-                // category: JSON.stringify(item.category),
-                spid: options.find(
-                    (iteme) => {
-                        // console.log(item);
-
-                        return item.spid === iteme.value
-                    },
-                )?.label,
+                spid: options.find((iteme) => item.spid === iteme.value)?.label || "Unknown",
+                customer_type: ct,
+                customer_grade: cg,
+                created_at: formatDate(item.createdAt),
             };
         },
     });
+    
     if (roles.includes("admin")) {
         columns.unshift({
             field: "spid",

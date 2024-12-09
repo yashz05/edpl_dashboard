@@ -219,32 +219,30 @@ export default function ApprovedProjects() {
                 "Authorization": `Bearer ${token}`,
             },
         },
-
         mapData: (item) => {
-            // var cmpl3 = JSON.parse(JSON.stringify(cmpl1));
-            console.log(item['company_name']);
-            // console.log(data?.data[0].name);
-            var cg = data?.data.find((i: any) => item.company_name === i.name)?.customer_grade
-            var ct = data?.data.find((i: any) => item.company_name === i.name)?.customer_type
-
-            // console.log(ch);
-
-
-            var c = data?.data.find((i: any) => item.company_name = i.name)?.name
-            // console.log(c);
-
+            if (!item || !data?.data) {
+                console.error("Item or data is missing");
+                return {};
+            }
+    
+            // Extract customer grade and type based on the company name
+            const customer = data.data.find((i) => item.company_name === i.name);
+            const cg = customer?.customer_grade || "N/A";
+            const ct = customer?.customer_type || "N/A";
+    
+            // Map the data for export
             return {
-                visited_date_time: formatDate(JSON.parse(JSON.stringify(item.data)).visited_date_time),
-                spid: options.find((iteme) => item.spid === iteme.value)?.label,
-                company_name: item['company_name'],
+                visited_date_time: formatDate(item?.data?.visited_date_time),
+                spid: options.find((opt) => item.spid === opt.value)?.label || "Unknown",
+                company_name: item.company_name || "Unnamed",
                 customer_type: ct,
-                custome_grade: cg,
-                remark: JSON.parse(JSON.stringify(item.data)).remark,
-                added_on: formatDate(item.createdAt)
+                customer_grade: cg, // Corrected spelling from "custome_grade" to "customer_grade"
+                remark: item?.data?.remark || "No remark",
+                added_on: formatDate(item.createdAt),
             };
-
         },
     });
+    
     return (
         <>
 
