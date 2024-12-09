@@ -56,7 +56,18 @@ export default function CategoryEdit() {
           label="Email"
           name="email"
         />
-
+ <TextField
+          {...register("branch")}
+          error={!!errors.branch}
+          defaultValue=""
+          margin="normal"
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+          label="Branch"
+          type="text"
+          name="branch"
+        />
+     
         <TextField
           {...register("password", { value: { 'password': '' } })}
           error={!!errors.password}

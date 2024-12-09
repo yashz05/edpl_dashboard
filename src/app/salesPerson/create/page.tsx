@@ -59,6 +59,20 @@ export default function BlogPostCreate() {
         />
         
         <TextField
+          {...register("branch", {
+            required: "This field is required",
+          })}
+          error={!!errors.branch}
+        
+          margin="normal"
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+          type="text"
+          label={"Branch"}
+          name="Branch"
+        />
+        
+        <TextField
           {...register("password", {
             required: "This field is required",
           })}
